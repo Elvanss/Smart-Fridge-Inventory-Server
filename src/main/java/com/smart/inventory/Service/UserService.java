@@ -58,4 +58,7 @@ public class UserService {
                 .orElseThrow(() -> new ObjectNotFoundException("user not found!", userId));
         this.userRepository.deleteById(userId);
     }
+
+    // make user sign up
+
 }

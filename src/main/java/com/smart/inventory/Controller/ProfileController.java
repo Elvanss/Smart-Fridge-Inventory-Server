@@ -24,6 +24,7 @@ public class ProfileController {
         this.profileMapper = profileMapper;
     }
 
+    // Get all profiles for a user.
     @GetMapping("/users/{userId}")
     public Result findAllProfiles(@PathVariable Long userId) {
         List<Profile> foundProfile = this.profileService.getAllProfilesForUser(userId);
@@ -36,6 +37,7 @@ public class ProfileController {
     }
 
 
+    // Get a profile by id.
     @GetMapping("/{profileId}")
     public Result findProfileById(@PathVariable Long profileId) {
         Profile foundProfile = this.profileService.getProfileById(profileId);
@@ -43,6 +45,7 @@ public class ProfileController {
         return new Result(true, StatusCode.SUCCESS, "Find One Success", profileDto);
     }
 
+    // Add a profile for a user.
     @PostMapping("/{userId}")
     public Result addProfile(@PathVariable Long userId, @RequestBody Profile newProfile) {
         Profile savedProfile = this.profileService.createProfile(userId, newProfile);
@@ -50,6 +53,7 @@ public class ProfileController {
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedProfileDto);
     }
 
+    // Update a profile.
     @PutMapping("/{profileId}")
     public Result updateProfile(@PathVariable Long profileId, @RequestBody ProfileDTO profileDto) {
         Profile update = this.profileMapper.convertToEntity(profileDto);
@@ -58,6 +62,7 @@ public class ProfileController {
         return new Result(true, StatusCode.SUCCESS, "Update Success", updatedProfileDto);
     }
 
+    // Delete a profile.
     @DeleteMapping("/{profileId}")
     public Result deleteProfile(@PathVariable Long profileId) {
         this.profileService.delete(profileId);

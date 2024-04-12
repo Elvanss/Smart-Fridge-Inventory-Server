@@ -25,6 +25,15 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
+    // Register a new user.
+    @PostMapping("/register")
+    public Result register(@RequestBody User newUser) {
+        User savedUser = this.userService.save(newUser);
+        UserDTO savedUserDto = this.userMapper.convertToDto(savedUser);
+        return new Result(true, StatusCode.SUCCESS, "Add Success", savedUserDto);
+    }
+
+    // Get all users.
     @GetMapping
     public Result findAllUsers() {
         List<User> foundUser = this.userService.findAll();
@@ -38,6 +47,7 @@ public class UserController {
         return new Result(true, StatusCode.SUCCESS, "Find All Success", userDtos);
     }
 
+    // Get a user by id.
     @GetMapping("/{userId}")
     public Result findUserById(@PathVariable Long userId) {
         User foundUser = this.userService.findById(userId);
@@ -45,15 +55,8 @@ public class UserController {
         return new Result(true, StatusCode.SUCCESS, "Find One Success", userDto);
     }
 
-    @PostMapping
-    public Result addUser(@RequestBody User newUser) {
-        User savedUser = this.userService.save(newUser);
-        UserDTO savedUserDto = this.userMapper.convertToDto(savedUser);
-        return new Result(true, StatusCode.SUCCESS, "Add Success", savedUserDto);
-    }
-
     // We are not using this to update password, need another changePassword method in this class.
-    @PutMapping("/{userId}")
+    @PutMapping("/update/{userId}")
     public Result updateUser(@PathVariable Long userId, @RequestBody UserDTO userDto) {
         User update = this.userMapper.convertToEntity(userDto);
         User updatedUser = this.userService.update(userId, update);
@@ -61,6 +64,7 @@ public class UserController {
         return new Result(true, StatusCode.SUCCESS, "Update Success", updatedUserDto);
     }
 
+    // Change password.
     @DeleteMapping("/{userId}")
     public Result deleteUser(@PathVariable Long userId) {
         this.userService.delete(userId);
