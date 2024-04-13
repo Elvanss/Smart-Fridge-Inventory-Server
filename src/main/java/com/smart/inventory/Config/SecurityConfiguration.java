@@ -72,6 +72,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.GET, this.baseUrl + "/profiles/**").permitAll() // Allow everyone to access the endpoint.
                                 .requestMatchers(HttpMethod.GET, this.baseUrl + "/users/**").hasRole(RoleList.ADMIN.name()) // Protect the endpoint.
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users").hasRole(RoleList.ADMIN.name()) // Protect the endpoint.
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/register").permitAll() // Protect the endpoint.
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/users/**").hasRole(RoleList.ADMIN.name()) // Protect the endpoint.
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/users/**").hasRole(RoleList.ADMIN.name()) // Protect the endpoint.
                                 //Alow swaggerUI with path http://localhost:8080/swagger-ui/index.html

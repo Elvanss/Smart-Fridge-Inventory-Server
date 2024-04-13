@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Component
 @Slf4j
 public class DBInitializer implements CommandLineRunner {
@@ -35,13 +38,13 @@ public class DBInitializer implements CommandLineRunner {
         user1.setUsername("adminUser");
         user1.setPassword("pass1");
         user1.setEmail("admin@gmail.com");
-        user1.setRoleUsers(RoleList.ADMIN);
+        user1.setType(RoleList.ADMIN);
 
         User user2 = new User();
         user2.setUsername("account1");
         user2.setPassword("pass1");
         user2.setEmail("user@gmail.com");
-        user2.setRoleUsers(RoleList.USER);
+        user2.setType(RoleList.USER);
 
         // Create Profile
         Profile profile11 = new Profile();

@@ -9,7 +9,9 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -35,8 +37,9 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Profile> profiles = new ArrayList<>();
 
-    @Column(name = "role")
-    private RoleList roleUsers;
+    @Enumerated(EnumType.STRING)
+    @Column(name="type")
+    private RoleList type;
 
     /**
      * Other Resolved Methods for User Entity

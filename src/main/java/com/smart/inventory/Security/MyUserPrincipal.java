@@ -14,7 +14,7 @@ public record MyUserPrincipal(User user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(StringUtils.tokenizeToStringArray(this.user.getRoleUsers().name(), " "))
+        return Arrays.stream(StringUtils.tokenizeToStringArray(this.user.getType().name(), " "))
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .toList();
     }

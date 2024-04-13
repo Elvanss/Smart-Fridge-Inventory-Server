@@ -13,7 +13,7 @@ public class UserMapper {
                 source.getUsername(),
                 source.getEmail(),
                 source.getPassword(),
-                source.getRoleUsers());
+                source.getType());
     }
 
     public User convertToEntity(UserDTO source) {
@@ -21,7 +21,7 @@ public class UserMapper {
         user.setUsername(source.username());
         user.setEmail(source.email());
         user.setPassword(source.password());
-        user.setRoleUsers(source.roles());
+        user.setType(source.roles());
         return user;
     }
 }
