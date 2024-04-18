@@ -16,9 +16,6 @@ public class CorsConfiguration {
                 registry.addMapping("/**") // Enable CORS for the whole application.
                 .allowedMethods("*") // Allow all HTTP methods.
                 .allowedOrigins("*") // Allow all origins.
-                .allowCredentials(true) // Allow credentials.
-                .maxAge(3600) // Set the maximum age of the CORS configuration.
-                .exposedHeaders("Authorization") // Expose the Authorization header.
                 .allowedHeaders("Authorization"); // Allow the Authorization header.
             }
         };
