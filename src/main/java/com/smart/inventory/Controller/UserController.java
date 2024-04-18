@@ -1,6 +1,7 @@
 package com.smart.inventory.Controller;
 
 import com.smart.inventory.DTO.UserDTO;
+import com.smart.inventory.Entity.Type.RoleList;
 import com.smart.inventory.Entity.User;
 import com.smart.inventory.Mapper.UserMapper;
 import com.smart.inventory.Service.UserService;
@@ -27,8 +28,8 @@ public class UserController {
 
     // Register a new user.
     @PostMapping("/register")
-    public Result register(@RequestBody User newUser) {
-        User savedUser = this.userService.save(newUser);
+    public Result register(@RequestBody User newUser,@RequestParam(name = "role", required=false) RoleList role) {
+        User savedUser = this.userService.save(newUser, role);
         UserDTO savedUserDto = this.userMapper.convertToDto(savedUser);
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedUserDto);
     }

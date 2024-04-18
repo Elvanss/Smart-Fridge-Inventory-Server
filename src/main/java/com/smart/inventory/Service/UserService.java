@@ -33,13 +33,13 @@ public class UserService {
                 .orElseThrow(() -> new ObjectNotFoundException("user not found!", userId));
     }
 
-    public User save(User user) {
-    user.setUsername(user.getUsername());
-    user.setEmail(user.getEmail());
-    user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-    user.setType(user.getType());
-    return this.userRepository.save(user);
-}
+    public User save(User user, RoleList role) {
+        user.setUsername(user.getUsername());
+        user.setEmail(user.getEmail());
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+        user.setType(role);
+        return this.userRepository.save(user);
+    }
 
     /**
      * We are not using this update to change user password.

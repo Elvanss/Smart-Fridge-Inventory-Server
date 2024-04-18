@@ -31,9 +31,31 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Arrays;
 
 @Configuration
 public class SecurityConfiguration {
+
+    private static final String[] WHITE_LIST = {
+            "/api/v1/auth/**",
+            "/api-docs",
+            "/api-docs/swagger-config",
+            "/swagger-ui-custom.html",
+            "/swagger-ui/index.html",
+            "/swagger-ui/**",
+            "/v2/api-docs/**",
+            "/swagger-resources/**",
+            "/swagger.json",
+            "/api/v1/variant-products/all",
+            "/api/v1/cart/**",
+            "/api/v1/order/**",
+            "/api/v1/order/user/**",
+            "/api/v1/product/**",
+            "/api/v1/product/update/**",
+            "/api/v1/categories/**",
+            "/api/v1/variant-products/**",
+            "/api/v1/variant-products/upload/**",
+    };
 
     private final RSAPublicKey publicKey;
 
@@ -69,13 +91,22 @@ public class SecurityConfiguration {
         https
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/profiles/**").permitAll() // Allow everyone to access the endpoint.
-                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/users/**").hasRole(RoleList.ADMIN.name()) // Protect the endpoint.
-                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users").hasRole(RoleList.ADMIN.name()) // Protect the endpoint.
-                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/register").permitAll() // Protect the endpoint.
-                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/users/**").hasRole(RoleList.ADMIN.name()) // Protect the endpoint.
-                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/users/**").hasRole(RoleList.ADMIN.name()) // Protect the endpoint.
-                                //Alow swaggerUI with path http://localhost:8080/swagger-ui/index.html
+                                // Sign In & Sign Up
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/login").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users").hasRole(RoleList.ADMIN.name())
+
+                                // Get all users
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/users/**").hasRole(RoleList.ADMIN.name())
+
+                                // Update and Delete
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name())
+
+                                // Other fields
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + Arrays.toString(WHITE_LIST)).permitAll()
+
+                                //Allow swaggerUI with path "http://localhost:8080/swagger-ui/index.html"
                                 .requestMatchers("/swagger-ui/**","/v3/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
@@ -118,7 +149,6 @@ public class SecurityConfiguration {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-
         /*
         Let’s say that that your authorization server communicates authorities in a custom claim called "authorities".
         In that case, you can configure the claim that JwtAuthenticationConverter should inspect, like so:
