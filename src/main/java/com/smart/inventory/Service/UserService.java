@@ -41,14 +41,6 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    /**
-     * We are not using this update to change user password.
-     *
-     * @param userId
-     * @param update
-     * @return
-     */
-
     public User update(Long userId, User update) {
         User oldUser = this.userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("user not found!", userId));
