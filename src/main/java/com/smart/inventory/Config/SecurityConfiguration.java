@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -34,27 +38,11 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST = {
-            "/api/v1/auth/**",
-            "/api-docs",
-            "/api-docs/swagger-config",
-            "/swagger-ui-custom.html",
-            "/swagger-ui/index.html",
-            "/swagger-ui/**",
-            "/v2/api-docs/**",
-            "/swagger-resources/**",
-            "/swagger.json",
-            "/api/v1/variant-products/all",
-            "/api/v1/cart/**",
-            "/api/v1/order/**",
-            "/api/v1/order/user/**",
-            "/api/v1/product/**",
-            "/api/v1/product/update/**",
-            "/api/v1/categories/**",
-            "/api/v1/variant-products/**",
-            "/api/v1/variant-products/upload/**",
+            "/api/v1/profiles/**",
     };
 
     private final RSAPublicKey publicKey;
@@ -87,12 +75,23 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() { // CORS Configuration
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")) ;
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity https) throws Exception {
         https
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 // Sign In & Sign Up
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/user").permitAll()
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/login").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users").hasRole(RoleList.ADMIN.name())
 
@@ -113,8 +112,8 @@ public class SecurityConfiguration {
                                 .anyRequest().authenticated()
 
                 )
+                .cors(c-> c.configurationSource(this.corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(httpBasic ->
                         httpBasic.authenticationEntryPoint(this.customBasicAuthenticationEntryPoint)
                 )

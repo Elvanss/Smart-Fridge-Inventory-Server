@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/v1/users")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
@@ -25,7 +25,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    /**
+   /**
      * Generate a JSON web token if username and password has been authenticated by the BasicAuthenticationFilter.
      * In summary, this filter is responsible for processing any request that has an HTTP request header of Authorization
      * with an authentication scheme of Basic and a Base64-encoded username:password token.
