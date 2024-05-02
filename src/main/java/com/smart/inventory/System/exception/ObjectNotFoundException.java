@@ -6,7 +6,7 @@ public class ObjectNotFoundException extends RuntimeException{
         super("Could not find " + objectName + " with Id " + id + " :(");
     }
 
-    public ObjectNotFoundException(String objectName, Integer id) {
+    public ObjectNotFoundException(String objectName, Long id) {
         super("Could not find " + objectName + " with Id " + id + " :(");
     }
 

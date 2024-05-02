@@ -41,21 +41,18 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private static final String[] WHITE_LIST = {
-            "/api/v1/profiles/**",
-    };
+//    private static final String[] WHITE_LIST = {
+//            "/api/v1/profiles/**",
+//    };
 
     private final RSAPublicKey publicKey;
-
     private final RSAPrivateKey privateKey;
 
     @Value("/api/v1")
     private String baseUrl;
 
     private final CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint;
-
     private final CustomBearerTokenAuthenticationEntryPoint customBearerTokenAuthenticationEntryPoint;
-
     private final CustomBearerTokenAccessDeniedHandler customBearerTokenAccessDeniedHandler;
 
     public SecurityConfiguration(CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint,
@@ -75,10 +72,19 @@ public class SecurityConfiguration {
     }
 
     @Bean
+//    public CorsConfigurationSource corsConfigurationSource() { // CORS Configuration
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")) ;
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
     public CorsConfigurationSource corsConfigurationSource() { // CORS Configuration
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")) ;
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -95,15 +101,29 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/login").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users").hasRole(RoleList.ADMIN.name())
 
-                                // Get all users
+                                // User Permission
                                 .requestMatchers(HttpMethod.GET, this.baseUrl + "/users/**").hasRole(RoleList.ADMIN.name())
-
-                                // Update and Delete
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name())
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name())
 
-                                // Other fields
-                                .requestMatchers(HttpMethod.GET, this.baseUrl + Arrays.toString(WHITE_LIST)).permitAll()
+                                // Profile Permissions
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/v1/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/v1/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/v1/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/v1/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+
+                                // Fridge Permissions
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/v1/fridge-inventory/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/v1/fridge-inventory/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/v1/fridge-inventory/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/v1/fridge-inventory/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+
+                                // Item Permissions
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/v1/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/v1/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/v1/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/v1/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
                                 //Allow swaggerUI with path "http://localhost:8080/swagger-ui/index.html"
                                 .requestMatchers("/swagger-ui/**","/v3/**").permitAll()

@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -15,19 +17,20 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "item")
-public class Item {
+@Table(name = "Item")
+public class Item implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "category")
     private String category;
 
-    @Column(name = "stock", nullable = false)
+    @Column(name = "stock")
     private Integer stock;
 
     @Column(name = "calories")
@@ -37,14 +40,22 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private StockStatus stockStatus;
 
+    @Column(name = "purchase_date")
+    private LocalDate purchaseDate;
+
     @Column(name = "expiry_date")
     private LocalDate expiryDate;
 
     @Column(name = "days_left")
-    private Integer daysLeft;
+    private Long daysLeft;
+
+    private String description;
 
     @ManyToOne
-    @JoinColumn(name = "member_fridge_area_id", referencedColumnName = "id")
-    private MemberFridgeArea memberFridgeArea;
+    private FridgeInventory fridge;
+
+//    @ManyToOne
+//    @JoinColumn(name = "member_fridge_area_id", referencedColumnName = "id")
+//    private MemberFridgeArea memberFridgeArea;
 
 }
