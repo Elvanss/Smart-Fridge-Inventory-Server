@@ -3,6 +3,7 @@ package com.smart.inventory.Service;
 import com.smart.inventory.Entity.Item;
 import com.smart.inventory.Repository.ItemRepository;
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,5 +73,15 @@ public class ItemService {
     // I need to make a method if I type as least the any character of the items name, it will show the items that contain the character.
     public List<Item> searchItemLeastByCharacter(String name) {
         return this.itemRepository.findByNameContaining(name);
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void ItemAlertByDayLeft() {
+        List<Item> items = this.itemRepository.findAll();
+        for (Item item : items) {
+            if (item.getDaysLeft() <= 3) {
+                System.out.println("Item " + item.getName() + " is going to expire in " + item.getDaysLeft() + " days.");
+            }
+        }
     }
 }

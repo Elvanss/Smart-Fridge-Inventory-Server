@@ -130,7 +130,6 @@ public class SecurityConfiguration {
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
                                 .anyRequest().authenticated()
-
                 )
                 .cors(c-> c.configurationSource(this.corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
