@@ -29,8 +29,9 @@ public class UserController {
 
     // Register a new user.
     @PostMapping("/register")
-    public Result register(@RequestBody User newUser,@RequestParam(name = "role", required=false) RoleList role) {
-        User savedUser = this.userService.save(newUser, role);
+    public Result register(@RequestBody UserDTO userDTO) {
+        User newUser = this.userMapper.convertToEntity(userDTO);
+        User savedUser = this.userService.save(newUser);
         UserDTO savedUserDto = this.userMapper.convertToDto(savedUser);
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedUserDto);
     }

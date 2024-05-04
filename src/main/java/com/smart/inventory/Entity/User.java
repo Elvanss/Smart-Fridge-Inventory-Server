@@ -34,12 +34,13 @@ public class User implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Profile> profiles = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     @Column(name="type")
     private RoleList type;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Profile> profiles = new ArrayList<>();
+
 
     /**
      * Other Resolved Methods for User Entity

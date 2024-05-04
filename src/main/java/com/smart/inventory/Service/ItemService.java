@@ -68,4 +68,9 @@ public class ItemService {
                 .orElseThrow(()-> new ObjectNotFoundException("Item Not Found!", id));
         this.itemRepository.deleteById(id);
     }
+
+    // I need to make a method if I type as least the any character of the items name, it will show the items that contain the character.
+    public List<Item> searchItemLeastByCharacter(String name) {
+        return this.itemRepository.findByNameContaining(name);
+    }
 }

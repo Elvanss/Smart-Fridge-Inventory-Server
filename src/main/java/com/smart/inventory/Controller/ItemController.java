@@ -64,5 +64,21 @@ public class ItemController {
         return new Result(true, StatusCode.SUCCESS, "Items Added", newItemDTOs);
     }
 
+    // Delete an item from the fridge
+    @DeleteMapping("/delete/{id}")
+    public Result deleteItem(@PathVariable Long id) {
+        this.itemService.deleteItem(id);
+        return new Result(true, StatusCode.SUCCESS, "Item Deleted", null);
+    }
+
+    @PostMapping("/searchByAnyCharacter")
+    public Result searchByAnyCharacter(@RequestBody String search) {
+        List<Item> items = this.itemService.searchItemLeastByCharacter(search);
+        List<ItemDTO> itemDTOS = items.stream()
+                .map(itemMapper::convertToItemDTO)
+                .toList();
+        return new Result(true, StatusCode.SUCCESS, "Search Results", itemDTOS);
+    }
+
 
 }

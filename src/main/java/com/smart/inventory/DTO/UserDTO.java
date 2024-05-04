@@ -1,15 +1,21 @@
 package com.smart.inventory.DTO;
 
 import com.smart.inventory.Entity.Type.RoleList;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class UserDTO {
+    private Long id;
+    private String username;
+    private String email;
+    private String password;
+    private RoleList roles;
 
-public record UserDTO(Long id,
-                      String username,
-                      String email,
-                      String password,
-                      RoleList roles) {
 }
+

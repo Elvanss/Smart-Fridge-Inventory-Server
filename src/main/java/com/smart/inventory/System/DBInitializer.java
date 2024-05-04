@@ -86,8 +86,8 @@ public class DBInitializer implements CommandLineRunner {
         user2.addProfile(profile22);
 
         // Save to DB
-        userService.save(user1, RoleList.ADMIN);
-        userService.save(user2, RoleList.USER);
+        userService.save(user1);
+        userService.save(user2);
 
         profileRepository.save(profile11);
         profileRepository.save(profile21);
