@@ -23,14 +23,11 @@ public class ProfileService {
 
     // Create Profile
     public Profile createProfile(Long userId, Profile profile) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ObjectNotFoundException("User not found with id: ", userId));
         profile.setName(profile.getName());
         profile.setAge(profile.getAge());
         profile.setDietary(profile.getDietary());
         profile.setAllergies(profile.getAllergies());
         profile.setDescription(profile.getDescription());
-        profile.setUser(user);
         return this.profileRepository.save(profile);
     }
 

@@ -52,12 +52,12 @@ public class FridgeInventoryController {
     }
 
     @PutMapping("assigns/{fridgeId}/{itemIds}")
-public Result assignItemsToFridge(@PathVariable Long fridgeId, @PathVariable String itemIds) {
-    List<Long> itemIdList = Arrays.stream(itemIds.split("-"))
-        .map(Long::valueOf)
-        .collect(Collectors.toList());
-    this.fridgeInventoryService.assignItemsToFridge(fridgeId, itemIdList);
-    return new Result(true, StatusCode.SUCCESS, "Items Assigned to Fridge " + fridgeId, null);
+    public Result assignItemsToFridge(@PathVariable Long fridgeId, @PathVariable String itemIds) {
+        List<Long> itemIdList = Arrays.stream(itemIds.split("-"))
+            .map(Long::valueOf)
+            .collect(Collectors.toList());
+        this.fridgeInventoryService.assignItemsToFridge(fridgeId, itemIdList);
+        return new Result(true, StatusCode.SUCCESS, "Items Assigned to Fridge " + fridgeId, null);
 }
 
 

@@ -74,4 +74,11 @@ public class UserController {
         return new Result(true, StatusCode.SUCCESS, "Delete Success");
     }
 
+    // Assign Profile to User
+    @PutMapping("/{userId}/assign/{profileId}")
+    public Result assignProfileToUser(@PathVariable Long userId, @PathVariable Long profileId) {
+        this.userService.assignProfileToUser(userId, profileId);
+        return new Result(true, StatusCode.SUCCESS, "Profile Assigned to User");
+    }
+
 }

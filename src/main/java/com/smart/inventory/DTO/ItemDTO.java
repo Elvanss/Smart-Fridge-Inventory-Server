@@ -23,4 +23,5 @@ public class ItemDTO {
     private LocalDate expiryDate;
     private Long daysLeft;
     private String description;
+//    private FridgeInventoryDTO fridge;
 }

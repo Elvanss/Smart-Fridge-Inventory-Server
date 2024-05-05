@@ -1,7 +1,9 @@
 package com.smart.inventory.Service;
 
+import com.smart.inventory.Entity.Profile;
 import com.smart.inventory.Entity.Type.RoleList;
 import com.smart.inventory.Entity.User;
+import com.smart.inventory.Repository.ProfileRepository;
 import com.smart.inventory.Repository.UserRepository;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,13 +17,14 @@ import java.util.Set;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
+    private final ProfileRepository profileRepository;
 
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProfileRepository profileRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.profileRepository = profileRepository;
     }
 
     public List<User> findAll() {
@@ -54,6 +57,22 @@ public class UserService {
         this.userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("user not found!", userId));
         this.userRepository.deleteById(userId);
+    }
+
+    public Profile assignProfileToUser(Long userId, Long profileId) {
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found!", userId));
+
+        Profile newProfileToBeAssigned = this.profileRepository.findById(profileId)
+                .orElseThrow(() -> new ObjectNotFoundException("Profile not found!", profileId));
+
+        if (newProfileToBeAssigned.getUser() != null) {
+            newProfileToBeAssigned.getUser().removeProfile(newProfileToBeAssigned);
+        }
+
+        user.addProfile(newProfileToBeAssigned);
+        return this.profileRepository.save(newProfileToBeAssigned);
+
     }
 
     // make user sign up

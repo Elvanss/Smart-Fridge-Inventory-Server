@@ -47,7 +47,8 @@ public class ProfileController {
 
     // Add a profile for a user.
     @PostMapping("/{userId}")
-    public Result addProfile(@PathVariable Long userId, @RequestBody Profile newProfile) {
+    public Result addProfile(@PathVariable Long userId, @RequestBody ProfileDTO profileDTO) {
+        Profile newProfile = this.profileMapper.convertToEntity(profileDTO);
         Profile savedProfile = this.profileService.createProfile(userId, newProfile);
         ProfileDTO savedProfileDto = this.profileMapper.convertToDto(savedProfile);
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedProfileDto);
