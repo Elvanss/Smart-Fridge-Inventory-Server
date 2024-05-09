@@ -102,10 +102,10 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users").hasRole(RoleList.ADMIN.name())
 
                                 // User Permission
-                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/users/**").hasRole(RoleList.ADMIN.name())
-                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name())
-                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name())
-                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name())
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
                                 // Profile Permissions
                                 .requestMatchers(HttpMethod.GET, this.baseUrl + "/v1/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())

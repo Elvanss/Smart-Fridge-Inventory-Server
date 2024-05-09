@@ -64,7 +64,7 @@ public class ProfileController {
     }
 
     // Delete a profile.
-    @DeleteMapping("/{profileId}")
+    @DeleteMapping("/delete/{profileId}")
     public Result deleteProfile(@PathVariable Long profileId) {
         this.profileService.delete(profileId);
         return new Result(true, StatusCode.SUCCESS, "Delete Success", null);

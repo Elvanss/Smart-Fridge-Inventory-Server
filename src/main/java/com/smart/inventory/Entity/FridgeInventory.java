@@ -30,7 +30,8 @@ public class FridgeInventory {
     @Column(name = "capacity", nullable = false)
     private Integer capacity;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fridge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "fridge")
     private List<Item> item = new ArrayList<>();
 
     @OneToOne
@@ -58,7 +59,7 @@ public class FridgeInventory {
     }
 
     public void removeItems() {
-        this.item.stream().forEach(item -> item.setFridge(null));
+        this.item.forEach(item -> item.setFridge(null));
         this.item = new ArrayList<>();
     }
 

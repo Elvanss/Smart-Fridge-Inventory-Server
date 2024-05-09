@@ -2,6 +2,7 @@ package com.smart.inventory.Service;
 
 import com.smart.inventory.Entity.Item;
 import com.smart.inventory.Repository.ItemRepository;
+import jakarta.transaction.Transactional;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -41,19 +42,19 @@ public class ItemService {
 
     // Update an item in the fridge
     public Item updateItem (Long id, Item item) {
-        Item itemValid = itemRepository.findById(id)
+        item = itemRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Item Not Found! "));
-        itemValid.setName(item.getName());
-        itemValid.setCategory(item.getCategory());
-        itemValid.setStock(item.getStock());
-        itemValid.setCalories(item.getCalories());
-        itemValid.setStockStatus(item.getStockStatus());
-        itemValid.setPurchaseDate(item.getPurchaseDate());
-        itemValid.setExpiryDate(item.getExpiryDate());
+        item.setName(item.getName());
+        item.setCategory(item.getCategory());
+        item.setStock(item.getStock());
+        item.setCalories(item.getCalories());
+        item.setStockStatus(item.getStockStatus());
+        item.setPurchaseDate(item.getPurchaseDate());
+        item.setExpiryDate(item.getExpiryDate());
 //        itemValid.setDaysLeft(itemValid.getExpiryDate().toEpochDay() - itemValid.getPurchaseDate().toEpochDay());
-        itemValid.setDescription(item.getDescription());
+        item.setDescription(item.getDescription());
 
-        return itemValid;
+        return item;
     }
 
     // Add multiple items to the fridge
@@ -64,10 +65,10 @@ public class ItemService {
     }
 
     // Delete an item from the fridge
-    public void deleteItem (Long id) {
-        this.itemRepository.findById(id)
-                .orElseThrow(()-> new ObjectNotFoundException("Item Not Found!", id));
-        this.itemRepository.deleteById(id);
+    public void deleteItem(Long id) {
+        Item itemValid = itemRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Item Not Found! "));
+        itemRepository.delete(itemValid);
     }
 
     // I need to make a method if I type as least the any character of the items name, it will show the items that contain the character.

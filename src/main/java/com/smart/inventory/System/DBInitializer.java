@@ -87,9 +87,9 @@ public class DBInitializer implements CommandLineRunner {
         userService.save(user1);
         userService.save(user2);
 
-        profileRepository.save(profile11);
-        profileRepository.save(profile21);
-        profileRepository.save(profile22);
+//        profileRepository.save(profile11);
+//        profileRepository.save(profile21);
+//        profileRepository.save(profile22);
 
 
         // Create items
@@ -101,6 +101,7 @@ public class DBInitializer implements CommandLineRunner {
         item1.setStockStatus(StockStatus.IN_STOCK);
         item1.setPurchaseDate(LocalDate.of(2021, 10, 1));
         item1.setExpiryDate(LocalDate.of(2021, 10, 31));
+        item1.setDaysLeft(item1.getExpiryDate().toEpochDay() - item1.getPurchaseDate().toEpochDay());
         item1.setDescription("Fresh Milk");
 //        Item itemSaved = itemRepository.save(item1);
 
@@ -112,6 +113,7 @@ public class DBInitializer implements CommandLineRunner {
         item2.setStockStatus(StockStatus.IN_STOCK);
         item2.setPurchaseDate(LocalDate.of(2021, 10, 2));
         item2.setExpiryDate(LocalDate.of(2021, 10, 7));
+        item2.setDaysLeft(item2.getExpiryDate().toEpochDay() - item2.getPurchaseDate().toEpochDay());
         item2.setDescription("Whole grain bread");
 
         Item item3 = new Item();
@@ -122,6 +124,7 @@ public class DBInitializer implements CommandLineRunner {
         item3.setStockStatus(StockStatus.IN_STOCK);
         item3.setPurchaseDate(LocalDate.of(2021, 10, 3));
         item3.setExpiryDate(LocalDate.of(2021, 10, 13));
+        item3.setDaysLeft(item3.getExpiryDate().toEpochDay() - item3.getPurchaseDate().toEpochDay());
         item3.setDescription("Red apples");
 
         Item item4 = new Item();
@@ -132,6 +135,7 @@ public class DBInitializer implements CommandLineRunner {
         item4.setStockStatus(StockStatus.IN_STOCK);
         item4.setPurchaseDate(LocalDate.of(2021, 10, 4));
         item4.setExpiryDate(LocalDate.of(2021, 10, 18));
+        item4.setDaysLeft(item4.getExpiryDate().toEpochDay() - item4.getPurchaseDate().toEpochDay());
         item4.setDescription("Free-range eggs");
 
         Item item5 = new Item();
@@ -142,6 +146,7 @@ public class DBInitializer implements CommandLineRunner {
         item5.setStockStatus(StockStatus.IN_STOCK);
         item5.setPurchaseDate(LocalDate.of(2021, 10, 5));
         item5.setExpiryDate(LocalDate.of(2021, 10, 20));
+        item5.setDaysLeft(item5.getExpiryDate().toEpochDay() - item5.getPurchaseDate().toEpochDay());
         item5.setDescription("Cheddar cheese");
 
         Item item6 = new Item();
@@ -152,6 +157,7 @@ public class DBInitializer implements CommandLineRunner {
         item6.setStockStatus(StockStatus.IN_STOCK);
         item6.setPurchaseDate(LocalDate.of(2021, 10, 6));
         item6.setExpiryDate(LocalDate.of(2021, 10, 9));
+        item6.setDaysLeft(item6.getExpiryDate().toEpochDay() - item6.getPurchaseDate().toEpochDay());
         item6.setDescription("Chicken breast");
 
 
@@ -167,6 +173,15 @@ public class DBInitializer implements CommandLineRunner {
         fridgeInventory2.addItem(item4);
         fridgeInventory2.addItem(item5);
         fridgeInventory2.addItem(item6);
+
+        fridgeInventoryRepository.save(fridgeInventory2);
+
+//        itemRepository.save(item1);
+//        itemRepository.save(item2);
+//        itemRepository.save(item3);
+//        itemRepository.save(item4);
+//        itemRepository.save(item5);
+//        itemRepository.save(item6);
 
 
         // Make a full detail meal
@@ -724,7 +739,6 @@ public class DBInitializer implements CommandLineRunner {
 
 
         // Save to DB
-        fridgeInventoryRepository.save(fridgeInventory2);
 
         /*
         * List of meals

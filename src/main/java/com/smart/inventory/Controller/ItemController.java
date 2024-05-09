@@ -68,7 +68,7 @@ public class ItemController {
     @DeleteMapping("/delete/{id}")
     public Result deleteItem(@PathVariable Long id) {
         this.itemService.deleteItem(id);
-        return new Result(true, StatusCode.SUCCESS, "Item Deleted", null);
+        return new Result(true, StatusCode.SUCCESS, "Item Deleted");
     }
 
     @PostMapping("/searchByAnyCharacter")
