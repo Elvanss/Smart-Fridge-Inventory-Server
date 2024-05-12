@@ -108,22 +108,22 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
                                 // Profile Permissions
-                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/v1/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
-                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/v1/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/v1/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/v1/profiles/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
                                 // Fridge Permissions
-                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/v1/fridge-inventory/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
-                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/v1/fridge-inventory/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/fridge-inventory/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/fridge-inventory/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/v1/fridge-inventory/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/v1/fridge-inventory/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
                                 // Item Permissions
-                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/v1/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
-                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/v1/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
-                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/v1/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
-                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/v1/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
                                 //Allow swaggerUI with path "http://localhost:8080/swagger-ui/index.html"
                                 .requestMatchers("/swagger-ui/**","/v3/**").permitAll()
