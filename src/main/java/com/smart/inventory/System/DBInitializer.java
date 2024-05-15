@@ -11,10 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 @Slf4j
@@ -26,248 +23,350 @@ public class DBInitializer implements CommandLineRunner {
     private final UserService userService;
     private final ItemRepository itemRepository;
     private final MealRepository mealRepository;
+    private final SharedFridgeRepository sharedFridgeInventory;
 
     public DBInitializer(UserRepository userRepository,
                          ProfileRepository profileRepository,
                          FridgeInventoryRepository fridgeInventoryRepository,
                          UserService userService, ItemRepository itemRepository,
-                         MealRepository mealRepository) {
+                         MealRepository mealRepository, SharedFridgeRepository sharedFridgeInventory) {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
         this.fridgeInventoryRepository = fridgeInventoryRepository;
         this.userService = userService;
         this.itemRepository = itemRepository;
         this.mealRepository = mealRepository;
+        this.sharedFridgeInventory = sharedFridgeInventory;
     }
 
 
     @Override
     public void run(String... args) {
-        // Create Users
-        User user1 = new User();
-        user1.setUsername("adminUser");
-        user1.setPassword("pass1");
-        user1.setEmail("admin@gmail.com");
-        user1.setType(RoleList.ADMIN);
+        /*
+        * Data Initialization in Workflow:
+        * 1 User
+        * 1 sharedFridge
+        * 3 Profile
+        * 3 FridgeInventory
+        * 18 Items
+        * 100 Meals
+        * 9 Consumption History
+        * */
 
-        User user2 = new User();
-        user2.setUsername("account1");
-        user2.setPassword("pass1");
-        user2.setEmail("user@gmail.com");
-        user2.setType(RoleList.USER);
+        // Initialize ADMIN (NO TOUCH!)
+//        User admin = new User();
+//        admin.setUsername("admin");
+//        admin.setEmail("admin@admin.com");
+//        admin.setPassword("admin");
+//        admin.setType(RoleList.ADMIN);
+//
+//        // Initialize Profile
+        Profile profile = new Profile();
+        profile.setName("Profile");
+        profile.setAge(30);
+        profile.setDietary(DietaryList.BREAKFAST_CEREALS);
+        profile.setAllergies("None");
+        profile.setDescription("Profile Description");
+//
+//        Profile profile2 = new Profile();
+//        profile2.setName("Profile2");
+//        profile2.setAge(40);
+//        profile2.setDietary(DietaryList.DAIRY_FREE);
+//        profile2.setAllergies("None");
+//        profile2.setDescription("Profile2 Description");
+//
+//        Profile profile3 = new Profile();
+//        profile3.setName("Profile3");
+//        profile3.setAge(50);
+//        profile3.setDietary(DietaryList.GLUTEN_FREE);
+//        profile3.setAllergies("None");
+//        profile3.setDescription("Profile3 Description");
+//
+//        // Initialize User
+        User user = new User();
+        user.setUsername("username");
+        user.setEmail("email@example.com");
+        user.setPassword("password");
+        user.setType(RoleList.USER);
+        user.addProfile(profile);
 
-        // Create Profile
-        Profile profile11 = new Profile();
-        profile11.setName("AdminProfile");
-        profile11.setAge(30);
-        profile11.setDietary(DietaryList.BREAKFAST_CEREALS);
-        profile11.setAllergies("None");
-        profile11.setDescription("Admin Profile");
+//        user.addProfile(profile2);
+//        user.addProfile(profile3);
+//
+//        // Initialize Shared Fridge
+//        Item item1 = new Item();
+//        item1.setName("Milk");
+//        item1.setCategory("Dairy");
+//        item1.setStock(1);
+//        item1.setCalories(100.4);
+//        item1.setProtein(8.0);
+//        item1.setFat(2.0);
+//        item1.setStockStatus(StockStatus.IN_STOCK);
+//        item1.setPurchaseDate(LocalDate.of(2021, 10, 1));
+//        item1.setExpiryDate(LocalDate.of(2021, 10, 31));
+//        item1.setDaysLeft(item1.getExpiryDate().toEpochDay() - item1.getPurchaseDate().toEpochDay());
+//        item1.setDescription("Fresh Milk");
+//
+//        Item item2 = new Item();
+//        item2.setName("Bread");
+//        item2.setCategory("Bakery");
+//        item2.setStock(2);
+//        item2.setCalories(250.0);
+//        item2.setProtein(25.2);
+//        item2.setFat(3.0);
+//        item2.setStockStatus(StockStatus.IN_STOCK);
+//        item2.setPurchaseDate(LocalDate.of(2021, 10, 2));
+//        item2.setExpiryDate(LocalDate.of(2021, 10, 7));
+//        item2.setDaysLeft(item2.getExpiryDate().toEpochDay() - item2.getPurchaseDate().toEpochDay());
+//        item2.setDescription("Whole grain bread");
+//
+//        Item item3 = new Item();
+//        item3.setName("Apple");
+//        item3.setCategory("Fruit");
+//        item3.setStock(10);
+//        item3.setCalories(52.0);
+//        item3.setProtein(0.3);
+//        item3.setFat(0.2);
+//        item3.setStockStatus(StockStatus.IN_STOCK);
+//        item3.setPurchaseDate(LocalDate.of(2021, 10, 3));
+//        item3.setExpiryDate(LocalDate.of(2021, 10, 13));
+//        item3.setDaysLeft(item3.getExpiryDate().toEpochDay() - item3.getPurchaseDate().toEpochDay());
+//        item3.setDescription("Red apples");
+//
+//        Item item4 = new Item();
+//        item4.setName("Eggs");
+//        item4.setCategory("Dairy");
+//        item4.setStock(12);
+//        item4.setCalories(68.0);
+//        item4.setProtein(5.5);
+//        item4.setFat(4.8);
+//        item4.setStockStatus(StockStatus.IN_STOCK);
+//        item4.setPurchaseDate(LocalDate.of(2021, 10, 4));
+//        item4.setExpiryDate(LocalDate.of(2021, 10, 18));
+//        item4.setDaysLeft(item4.getExpiryDate().toEpochDay() - item4.getPurchaseDate().toEpochDay());
+//        item4.setDescription("Free-range eggs");
+//
+//        Item item5 = new Item();
+//        item5.setName("Cheese");
+//        item5.setCategory("Dairy");
+//        item5.setStock(1);
+//        item5.setCalories(402.0);
+//        item5.setProtein(25.0);
+//        item5.setFat(33.0);
+//        item5.setStockStatus(StockStatus.IN_STOCK);
+//        item5.setPurchaseDate(LocalDate.of(2021, 10, 5));
+//        item5.setExpiryDate(LocalDate.of(2021, 10, 20));
+//        item5.setDaysLeft(item5.getExpiryDate().toEpochDay() - item5.getPurchaseDate().toEpochDay());
+//        item5.setDescription("Cheddar cheese");
+//
+//        Item item6 = new Item();
+//        item6.setName("Chicken");
+//        item6.setCategory("Meat");
+//        item6.setStock(1);
+//        item6.setCalories(335.0);
+//        item6.setProtein(31.0);
+//        item6.setFat(20.0);
+//        item6.setStockStatus(StockStatus.IN_STOCK);
+//        item6.setPurchaseDate(LocalDate.of(2021, 10, 6));
+//        item6.setExpiryDate(LocalDate.of(2021, 10, 9));
+//        item6.setDaysLeft(item6.getExpiryDate().toEpochDay() - item6.getPurchaseDate().toEpochDay());
+//        item6.setDescription("Chicken breast");
+//
+//        Item item7 = new Item();
+//        item7.setName("Beef");
+//        item7.setCategory("Meat");
+//        item7.setStock(1);
+//        item7.setCalories(250.0);
+//        item7.setProtein(26.0);
+//        item7.setFat(17.0);
+//        item7.setStockStatus(StockStatus.IN_STOCK);
+//        item7.setPurchaseDate(LocalDate.of(2021, 10, 7));
+//        item7.setExpiryDate(LocalDate.of(2021, 10, 10));
+//        item7.setDaysLeft(item7.getExpiryDate().toEpochDay() - item7.getPurchaseDate().toEpochDay());
+//        item7.setDescription("Beef steak");
+//
+//        Item item8 = new Item();
+//        item8.setName("Pork");
+//        item8.setCategory("Meat");
+//        item8.setStock(2);
+//        item8.setCalories(250.0);
+//        item8.setProtein(26.0);
+//        item8.setFat(17.0);
+//        item8.setStockStatus(StockStatus.IN_STOCK);
+//        item8.setPurchaseDate(LocalDate.of(2021, 10, 8));
+//        item8.setExpiryDate(LocalDate.of(2021, 10, 11));
+//        item8.setDaysLeft(item8.getExpiryDate().toEpochDay() - item8.getPurchaseDate().toEpochDay());
+//        item8.setDescription("Pork chop");
+//
+//        Item item9 = new Item();
+//        item9.setName("Orange Juice");
+//        item9.setCategory("Beverages");
+//        item9.setStock(4);
+//        item9.setCalories(45.0);
+//        item9.setProtein(0.7);
+//        item9.setFat(0.2);
+//        item9.setStockStatus(StockStatus.IN_STOCK);
+//        item9.setPurchaseDate(LocalDate.of(2021, 10, 4));
+//        item9.setExpiryDate(LocalDate.of(2021, 11, 4));
+//        item9.setDaysLeft(item9.getExpiryDate().toEpochDay() - item9.getPurchaseDate().toEpochDay());
+//        item9.setDescription("100% pure orange juice");
+//
+//        Item item10 = new Item();
+//        item10.setName("Yogurt");
+//        item10.setCategory("Dairy");
+//        item10.setStock(6);
+//        item10.setCalories(59.0);
+//        item10.setProtein(10.0);
+//        item10.setFat(0.4);
+//        item10.setStockStatus(StockStatus.IN_STOCK);
+//        item10.setPurchaseDate(LocalDate.of(2021, 10, 2));
+//        item10.setExpiryDate(LocalDate.of(2021, 10, 16));
+//        item10.setDaysLeft(item10.getExpiryDate().toEpochDay() - item10.getPurchaseDate().toEpochDay());
+//        item10.setDescription("Low-fat yogurt");
+//
+//        Item item11 = new Item();
+//        item11.setName("Peanut Butter");
+//        item11.setCategory("Spreads");
+//        item11.setStock(2);
+//        item11.setCalories(588.0);
+//        item11.setProtein(25.0);
+//        item11.setFat(50.0);
+//        item11.setStockStatus(StockStatus.IN_STOCK);
+//        item11.setPurchaseDate(LocalDate.of(2021, 10, 5));
+//        item11.setExpiryDate(LocalDate.of(2022, 4, 5));
+//        item11.setDaysLeft(item11.getExpiryDate().toEpochDay() - item11.getPurchaseDate().toEpochDay());
+//        item11.setDescription("Creamy peanut butter");
+//
+//        Item item12 = new Item();
+//        item12.setName("Salmon");
+//        item12.setCategory("Seafood");
+//        item12.setStock(4);
+//        item12.setCalories(208.0);
+//        item12.setProtein(20.0);
+//        item12.setFat(13.0);
+//        item12.setStockStatus(StockStatus.IN_STOCK);
+//        item12.setPurchaseDate(LocalDate.of(2021, 10, 6));
+//        item12.setExpiryDate(LocalDate.of(2021, 10, 12));
+//        item12.setDaysLeft(item12.getExpiryDate().toEpochDay() - item12.getPurchaseDate().toEpochDay());
+//        item12.setDescription("Fresh Atlantic salmon fillet");
+//
+//        Item item13 = new Item();
+//        item13.setName("Spinach");
+//        item13.setCategory("Vegetables");
+//        item13.setStock(3);
+//        item13.setCalories(23.0);
+//        item13.setProtein(2.9);
+//        item13.setFat(0.4);
+//        item13.setStockStatus(StockStatus.IN_STOCK);
+//        item13.setPurchaseDate(LocalDate.of(2021, 10, 7));
+//        item13.setExpiryDate(LocalDate.of(2021, 10, 14));
+//        item13.setDaysLeft(item13.getExpiryDate().toEpochDay() - item13.getPurchaseDate().toEpochDay());
+//        item13.setDescription("Fresh spinach leaves");
+//
+//        Item item14 = new Item();
+//        item14.setName("Greek Yogurt");
+//        item14.setCategory("Dairy");
+//        item14.setStock(6);
+//        item14.setCalories(59.0);
+//        item14.setProtein(10.0);
+//        item14.setFat(0.4);
+//        item14.setStockStatus(StockStatus.IN_STOCK);
+//        item14.setPurchaseDate(LocalDate.of(2021, 10, 8));
+//        item14.setExpiryDate(LocalDate.of(2021, 10, 22));
+//        item14.setDaysLeft(item14.getExpiryDate().toEpochDay() - item14.getPurchaseDate().toEpochDay());
+//        item14.setDescription("Low-fat Greek yogurt");
+//
+//        Item item15 = new Item();
+//        item15.setName("Duck");
+//        item15.setCategory("Dairy");
+//        item15.setStock(12);
+//        item15.setCalories(155.0);
+//        item15.setProtein(13.0);
+//        item15.setFat(11.0);
+//        item15.setStockStatus(StockStatus.IN_STOCK);
+//        item15.setPurchaseDate(LocalDate.of(2021, 10, 9));
+//        item15.setExpiryDate(LocalDate.of(2021, 11, 9));
+//        item15.setDaysLeft(item15.getExpiryDate().toEpochDay() - item15.getPurchaseDate().toEpochDay());
+//        item15.setDescription("Fresh Duck breast");
+//
+//        Item item16 = new Item();
+//        item16.setName("Almond Milk");
+//        item16.setCategory("Beverages");
+//        item16.setStock(2);
+//        item16.setCalories(30.0);
+//        item16.setProtein(1.0);
+//        item16.setFat(2.5);
+//        item16.setStockStatus(StockStatus.IN_STOCK);
+//        item16.setPurchaseDate(LocalDate.of(2021, 10, 10));
+//        item16.setExpiryDate(LocalDate.of(2021, 11, 10));
+//        item16.setDaysLeft(item16.getExpiryDate().toEpochDay() - item16.getPurchaseDate().toEpochDay());
+//        item16.setDescription("Unsweetened almond milk");
+//
+//        Item item17 = new Item();
+//        item17.setName("Broccoli");
+//        item17.setCategory("Vegetables");
+//        item17.setStock(3);
+//        item17.setCalories(55.0);
+//        item17.setProtein(3.7);
+//        item17.setFat(0.6);
+//        item17.setStockStatus(StockStatus.IN_STOCK);
+//        item17.setPurchaseDate(LocalDate.of(2021, 10, 11));
+//        item17.setExpiryDate(LocalDate.of(2021, 10, 18));
+//        item17.setDaysLeft(item17.getExpiryDate().toEpochDay() - item17.getPurchaseDate().toEpochDay());
+//        item17.setDescription("Fresh broccoli florets");
+//
+//        Item item18 = new Item();
+//        item18.setName("Strawberries");
+//        item18.setCategory("Fruits");
+//        item18.setStock(5);
+//        item18.setCalories(32.0);
+//        item18.setProtein(0.7);
+//        item18.setFat(0.3);
+//        item18.setStockStatus(StockStatus.IN_STOCK);
+//        item18.setPurchaseDate(LocalDate.of(2021, 10, 12));
+//        item18.setExpiryDate(LocalDate.of(2021, 10, 17));
+//        item18.setDaysLeft(item18.getExpiryDate().toEpochDay() - item18.getPurchaseDate().toEpochDay());
+//        item18.setDescription("Fresh organic strawberries");
+//
+        FridgeInventory fridgeInventory1 = new FridgeInventory();
+        fridgeInventory1.setProfile(profile);
+//        fridgeInventory1.addItem(item1);
+//        fridgeInventory1.addItem(item2);
+//        fridgeInventory1.addItem(item3);
+//        fridgeInventory1.addItem(item4);
+//        fridgeInventory1.addItem(item5);
+//        fridgeInventory1.addItem(item6);
+//
+//        FridgeInventory fridgeInventory2 = new FridgeInventory();
+//        fridgeInventory2.setProfile(profile2);
+//        fridgeInventory2.addItem(item7);
+//        fridgeInventory2.addItem(item8);
+//        fridgeInventory2.addItem(item9);
+//        fridgeInventory2.addItem(item10);
+//        fridgeInventory2.addItem(item11);
+//        fridgeInventory2.addItem(item12);
+//        fridgeInventory2.addItem(item13);
+//        fridgeInventory2.addItem(item14);
+//
+//        FridgeInventory fridgeInventory3 = new FridgeInventory();
+//        fridgeInventory3.setProfile(profile3);
+//        fridgeInventory3.addItem(item15);
+//        fridgeInventory3.addItem(item16);
+//        fridgeInventory3.addItem(item17);
+//        fridgeInventory3.addItem(item18);
+//
+//
+        SharedFridge sharedFridge = new SharedFridge();
+        sharedFridge.setId(1L);
+        sharedFridge.setUser(user);
+        sharedFridge.addFridgeInventory(fridgeInventory1);
+//        sharedFridge.addFridgeInventory(fridgeInventory2);
+//        sharedFridge.addFridgeInventory(fridgeInventory3);
+//
+//
+        userService.save(user);
+        sharedFridgeInventory.save(sharedFridge);
 
-        Profile profile21 = new Profile();
-        profile21.setName("Dad");
-        profile21.setAge(40);
-        profile21.setDietary(DietaryList.DAIRY_FREE);
-        profile21.setAllergies("None");
-        profile21.setDescription("Dad Profile");
-
-        Profile profile22 = new Profile();
-        profile22.setName("Mom");
-        profile22.setAge(35);
-        profile22.setDietary(DietaryList.ALCOHOL_FREE);
-        profile22.setAllergies("None");
-        profile22.setDescription("Mom Profile");
-
-        // Add Profile to User
-        user1.addProfile(profile11);
-        user2.addProfile(profile21);
-        user2.addProfile(profile22);
-
-        // Save to DB
-        userService.save(user1);
-        userService.save(user2);
-
-//        profileRepository.save(profile11);
-//        profileRepository.save(profile21);
-//        profileRepository.save(profile22);
-
-
-        // Create items
-        Item item1 = new Item();
-        item1.setName("Milk");
-        item1.setCategory("Dairy");
-        item1.setStock(1);
-        item1.setCalories(100.4);
-        item1.setStockStatus(StockStatus.IN_STOCK);
-        item1.setPurchaseDate(LocalDate.of(2021, 10, 1));
-        item1.setExpiryDate(LocalDate.of(2021, 10, 31));
-        item1.setDaysLeft(item1.getExpiryDate().toEpochDay() - item1.getPurchaseDate().toEpochDay());
-        item1.setDescription("Fresh Milk");
-//        Item itemSaved = itemRepository.save(item1);
-
-        Item item2 = new Item();
-        item2.setName("Bread");
-        item2.setCategory("Bakery");
-        item2.setStock(2);
-        item2.setCalories(250.0);
-        item2.setStockStatus(StockStatus.IN_STOCK);
-        item2.setPurchaseDate(LocalDate.of(2021, 10, 2));
-        item2.setExpiryDate(LocalDate.of(2021, 10, 7));
-        item2.setDaysLeft(item2.getExpiryDate().toEpochDay() - item2.getPurchaseDate().toEpochDay());
-        item2.setDescription("Whole grain bread");
-
-        Item item3 = new Item();
-        item3.setName("Apple");
-        item3.setCategory("Fruit");
-        item3.setStock(10);
-        item3.setCalories(52.0);
-        item3.setStockStatus(StockStatus.IN_STOCK);
-        item3.setPurchaseDate(LocalDate.of(2021, 10, 3));
-        item3.setExpiryDate(LocalDate.of(2021, 10, 13));
-        item3.setDaysLeft(item3.getExpiryDate().toEpochDay() - item3.getPurchaseDate().toEpochDay());
-        item3.setDescription("Red apples");
-
-        Item item4 = new Item();
-        item4.setName("Eggs");
-        item4.setCategory("Dairy");
-        item4.setStock(12);
-        item4.setCalories(68.0);
-        item4.setStockStatus(StockStatus.IN_STOCK);
-        item4.setPurchaseDate(LocalDate.of(2021, 10, 4));
-        item4.setExpiryDate(LocalDate.of(2021, 10, 18));
-        item4.setDaysLeft(item4.getExpiryDate().toEpochDay() - item4.getPurchaseDate().toEpochDay());
-        item4.setDescription("Free-range eggs");
-
-        Item item5 = new Item();
-        item5.setName("Cheese");
-        item5.setCategory("Dairy");
-        item5.setStock(1);
-        item5.setCalories(402.0);
-        item5.setStockStatus(StockStatus.IN_STOCK);
-        item5.setPurchaseDate(LocalDate.of(2021, 10, 5));
-        item5.setExpiryDate(LocalDate.of(2021, 10, 20));
-        item5.setDaysLeft(item5.getExpiryDate().toEpochDay() - item5.getPurchaseDate().toEpochDay());
-        item5.setDescription("Cheddar cheese");
-
-        Item item6 = new Item();
-        item6.setName("Chicken");
-        item6.setCategory("Meat");
-        item6.setStock(1);
-        item6.setCalories(335.0);
-        item6.setStockStatus(StockStatus.IN_STOCK);
-        item6.setPurchaseDate(LocalDate.of(2021, 10, 6));
-        item6.setExpiryDate(LocalDate.of(2021, 10, 9));
-        item6.setDaysLeft(item6.getExpiryDate().toEpochDay() - item6.getPurchaseDate().toEpochDay());
-        item6.setDescription("Chicken breast");
-
-
-
-        // Create Fridges Inventory for User
-        FridgeInventory fridgeInventory2 = new FridgeInventory();
-        fridgeInventory2.setLocation("Kitchen");
-        fridgeInventory2.setCapacity(100);
-        fridgeInventory2.setUser(user2);
-        fridgeInventory2.addItem(item1);
-        fridgeInventory2.addItem(item2);
-        fridgeInventory2.addItem(item3);
-        fridgeInventory2.addItem(item4);
-        fridgeInventory2.addItem(item5);
-        fridgeInventory2.addItem(item6);
-
-        fridgeInventoryRepository.save(fridgeInventory2);
-
-//        itemRepository.save(item1);
-//        itemRepository.save(item2);
-//        itemRepository.save(item3);
-//        itemRepository.save(item4);
-//        itemRepository.save(item5);
-//        itemRepository.save(item6);
-
-
-        // Make a full detail meal
-
-//        public enum DietaryList {
-//            VEGAN,
-//            VEGETARIAN,
-//            PESCATARIAN,
-//            KETO,
-//            PALEO,
-//            MEDITERRANEAN,
-//            DASH,
-//            WHOLE30,
-//            FLEXITARIAN,
-//            LOW_FODMAP,
-//            GLUTEN_FREE,
-//            DAIRY_FREE,
-//            NUT_FREE,
-//            SOY_FREE,
-//            EGG_FREE,
-//            SHELLFISH_FREE,
-//            WHEAT_FREE,
-//            FISH_FREE,
-//            RED_MEAT_FREE,
-//            PORK_FREE,
-//            CRUSTACEAN_FREE,
-//            CELERY_FREE,
-//            MUSTARD_FREE,
-//            SESAME_FREE,
-//            LUPINE_FREE,
-//            MOLLUSK_FREE,
-//            ALCOHOL_FREE,
-//            NO_OIL_ADDED,
-//            NO_SUGAR_ADDED,
-//            NO_SUGAR,
-//            NO_OIL,
-//            LOW_SUGAR,
-//            LOW_FAT,
-//            LOW_CALORIE,
-//            HIGH_PROTEIN,
-//            HIGH_FIBER,
-//            LOW_CARB,
-//            LOW_SODIUM,
-//            LOW_CHOLESTEROL,
-//            SUGAR_CONSCIOUS,
-//            FAT_FREE,
-//            KIDNEY_FRIENDLY,
-//            KOSHER,
-//            HALAL,
-//            ALCOHOL_CONSCIOUS,
-//            IMMUNE_SUPPORTIVE,
-//            GUT_FRIENDLY,
-//            WHEAT_FREE_GLUTEN_FREE,
-//            SUGAR_FREE,
-//            LOW_POTASSIUM,
-//            VEGETABLE,
-//            FRUIT,
-//            DAIRY,
-//            GRAIN,
-//            PROTEIN,
-//            SEAFOOD,
-//            FATS_AND_OILS,
-//            SWEETENERS,
-//            SPICES_AND_SEASONINGS,
-//            BEVERAGES,
-//            LEGUMES,
-//            NUTS_AND_SEEDS,
-//            BAKED_PRODUCTS,
-//            SWEETS,
-//            CEREALS,
-//            FAST_FOOD,
-//            MEALS,
-//            SNACKS,
-//            RESTAURANT_FOODS,
-//            DAIRY_AND_EGG_PRODUCTS,
-//            SAUSAGES_AND_LUNCHEON_MEATS,
-//            BREAKFAST_CEREALS,
-//            SOUPS,
-//            BEEF_PRODUCTS,
-//            FINFISH_AND_SHELLFISH_PRODUCTS,
-//            LEGUMES_AND_LEGUME_PRODUCTS,
-//            LAMB_VEAL_AND_GAME_PRODUCTS,
-//            PORK_PRODUCTS,
-//            POULTRY_PRODUCTS,
-//            SWE
-//        }
 
         Meal meal1 = new Meal();
         meal1.setName("Chicken Salad");
@@ -772,10 +871,5 @@ public class DBInitializer implements CommandLineRunner {
         mealRepository.save(meal25);
         mealRepository.save(meal26);
 
-
-
-        // Print to console
-        log.info("Users: {}", userRepository.findAll());
-        log.info("Profiles: {}", profileRepository.findAll());
     }
 }

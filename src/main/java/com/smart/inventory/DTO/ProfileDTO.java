@@ -18,4 +18,6 @@ public class ProfileDTO {
     private String Allergies;
     private String description;
     private UserDTO user;
+    private int numberOfConsumptionRecords;
+    private NutritionTargetDTO nutritionTarget;
 }

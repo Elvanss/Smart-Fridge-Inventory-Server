@@ -1,6 +1,6 @@
 package com.smart.inventory.DTO;
 
-import com.smart.inventory.Entity.Type.RoleList;
+import com.smart.inventory.Entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
+public class SharedFridgeDTO {
     private Long id;
-    private String username;
-    private String email;
-    private String password;
-    private RoleList roles;
-    private int numberOfProfiles;
-
+    private UserDTO userDTO;
+    private int numberOfFridgeInventories;
 }
-

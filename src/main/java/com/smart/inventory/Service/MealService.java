@@ -1,7 +1,9 @@
 package com.smart.inventory.Service;
 
 import com.smart.inventory.Entity.Meal;
+import com.smart.inventory.Entity.Profile;
 import com.smart.inventory.Repository.MealRepository;
+import com.smart.inventory.Repository.ProfileRepository;
 import com.smart.inventory.System.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,11 @@ import java.util.stream.Collectors;
 public class MealService {
 
     private final MealRepository mealRepository;
+    private final ProfileRepository profileRepository;
 
-    public MealService(MealRepository mealRepository) {
+    public MealService(MealRepository mealRepository, ProfileRepository profileRepository) {
         this.mealRepository = mealRepository;
+        this.profileRepository = profileRepository;
     }
 
     public List<Meal> findAll() {
@@ -26,6 +30,10 @@ public class MealService {
     public Meal findById(Long mealId) {
         return this.mealRepository.findById(mealId)
                 .orElseThrow(() -> new ObjectNotFoundException("meal not found!", mealId));
+    }
+
+    public List<Meal> searchingMeal(String name) {
+        return this.mealRepository.findByNameContaining(name);
     }
 
     public Meal save(Meal meal) {
@@ -82,6 +90,7 @@ public class MealService {
 //
 //        return selectedMeals;
 //    }
+
     public List<Meal> getMealSuggestion(List<String> items, int days, int maxMealsPerDay) {
         List<Meal> allMeals = this.mealRepository.findAll();
 
@@ -105,5 +114,19 @@ public class MealService {
         }
 
         return selectedMeals;
+    }
+
+    public void assignedMealToProfile(Long mealId, Long profileId) {
+        Meal mealToBeAssigned = this.mealRepository.findById(mealId)
+                .orElseThrow(() -> new ObjectNotFoundException("meal not found!", mealId));
+
+        Profile profile = this.profileRepository.findById(profileId)
+                .orElseThrow(() -> new ObjectNotFoundException("profile not found!", profileId));
+
+        profile.addMealSaved(mealToBeAssigned);
+    }
+
+    public List<Meal> getMealsByProfile(Profile profile) {
+        return profile.getMealSaved();
     }
 }

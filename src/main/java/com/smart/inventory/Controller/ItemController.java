@@ -2,10 +2,14 @@ package com.smart.inventory.Controller;
 
 import com.smart.inventory.DTO.ItemDTO;
 import com.smart.inventory.Entity.Item;
+import com.smart.inventory.Entity.Profile;
+import com.smart.inventory.Entity.User;
 import com.smart.inventory.Mapper.ItemMapper;
 import com.smart.inventory.Service.ItemService;
+import com.smart.inventory.Service.ProfileService;
 import com.smart.inventory.System.Result;
 import com.smart.inventory.System.StatusCode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,69 +19,93 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/items")
 public class ItemController {
 
-    private final ItemService itemService;
-    private final ItemMapper itemMapper;
+    @Autowired
+    private ItemService itemService;
 
-    public ItemController(ItemService itemService, ItemMapper itemMapper) {
-        this.itemService = itemService;
-        this.itemMapper = itemMapper;
-    }
+    @Autowired
+    private ItemMapper itemMapper;
+    @Autowired
+    private ProfileService profileService;
 
-    // Get all items that belong to a fridge
     @GetMapping
     public Result getItems() {
-        List<Item> items = this.itemService.getItems();
+        List<Item> items = itemService.getItems();
         List<ItemDTO> itemDTOS = items.stream()
                 .map(itemMapper::convertToItemDTO)
-                .toList();
-
+                .collect(Collectors.toList());
         return new Result(true, StatusCode.SUCCESS, "All Items", itemDTOS);
     }
 
-    // Add an item to the fridge
-    @PostMapping("/add")
-    public Result addItem(@RequestBody ItemDTO itemDTO) {
-        Item item = this.itemMapper.convertToItem(itemDTO);
-        Item newItem = this.itemService.addItem(item);
-        ItemDTO newItemDTO = this.itemMapper.convertToItemDTO(newItem);
-        return new Result(true, StatusCode.SUCCESS, "Item Added", newItemDTO);
-    }
-
-    // Update an item in the fridge
     @PutMapping("/update/{id}")
     public Result updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
-        Item item = this.itemMapper.convertToItem(itemDTO);
-        Item updatedItem = this.itemService.updateItem(id, item);
-        ItemDTO updatedItemDTO = this.itemMapper.convertToItemDTO(updatedItem);
+        Item item = itemMapper.convertToItem(itemDTO);
+        Item updatedItem = itemService.updateItem(id, item);
+        ItemDTO updatedItemDTO = itemMapper.convertToItemDTO(updatedItem);
         return new Result(true, StatusCode.SUCCESS, "Item Updated", updatedItemDTO);
     }
 
-    @PostMapping("/add-multiple")
-    public Result addItems(@RequestBody List<ItemDTO> itemDTOs) {
-        List<Item> items = itemDTOs.stream()
-            .map(itemMapper::convertToItem)
-            .collect(Collectors.toList());
-        List<Item> newItems = this.itemService.addItems(items);
-        List<ItemDTO> newItemDTOs = newItems.stream()
-            .map(itemMapper::convertToItemDTO)
-            .collect(Collectors.toList());
-        return new Result(true, StatusCode.SUCCESS, "Items Added", newItemDTOs);
+    // Requirement 2: Add item to fridge
+    @PostMapping("/{profileId}/add")
+    public Result addItemToFridgeInventory(@PathVariable Long profileId, @RequestBody Item item) {
+        Profile profile = profileService.getProfileById(profileId);
+        if (profile == null) {
+            return new Result(false, StatusCode.NOT_FOUND, "Profile not found");
+        }
+
+        Item savedItem = itemService.addItemToFridge(profile, item);
+        ItemDTO itemDTO = itemMapper.convertToItemDTO(savedItem);
+        return new Result(true, StatusCode.SUCCESS, "Item Added to Fridge", itemDTO);
     }
 
-    // Delete an item from the fridge
     @DeleteMapping("/delete/{id}")
     public Result deleteItem(@PathVariable Long id) {
-        this.itemService.deleteItem(id);
+        itemService.deleteItem(id);
         return new Result(true, StatusCode.SUCCESS, "Item Deleted");
     }
 
-    @PostMapping("/searchByAnyCharacter")
-    public Result searchByAnyCharacter(@RequestBody String search) {
-        List<Item> items = this.itemService.searchItemLeastByCharacter(search);
+    // Requirement 2: Search item by name
+    @GetMapping("/search")
+    public Result searchItemLeastByCharacter(@RequestParam String name) {
+        List<Item> items = itemService.searchItemLeastByCharacter(name);
         List<ItemDTO> itemDTOS = items.stream()
                 .map(itemMapper::convertToItemDTO)
-                .toList();
+                .collect(Collectors.toList());
         return new Result(true, StatusCode.SUCCESS, "Search Results", itemDTOS);
+    }
+
+    @GetMapping("/fridgeInventory/{userId}")
+    public Result getFridgeInventoryForUser(@PathVariable Long userId) {
+        User user = new User(); // You need to get the user based on the userId
+        List<Item> items = itemService.getFridgeInventoryForUser(user);
+        List<ItemDTO> itemDTOS = items.stream()
+                .map(itemMapper::convertToItemDTO)
+                .collect(Collectors.toList());
+        return new Result(true, StatusCode.SUCCESS, "Fridge Inventory", itemDTOS);
+    }
+
+    // Requirement 2: Update item stock
+    @PutMapping("/updateStock/{itemId}")
+    public Result updateItemStock(@PathVariable Long itemId, @RequestParam Integer newStock) {
+        Item item = new Item(); // You need to get the item based on the itemId
+        itemService.updateItemStock(item, newStock);
+        return new Result(true, StatusCode.SUCCESS, "Item Stock Updated");
+    }
+
+    // Requirement 2: Remove item from fridge
+    @DeleteMapping("/removeFromFridge/{itemId}")
+    public Result removeItemFromFridge(@PathVariable Item itemId) {
+        itemService.removeItemFromFridge(itemId);
+        return new Result(true, StatusCode.SUCCESS, "Item Removed From Fridge");
+    }
+
+    @PostMapping("/updateFridgeInventory/{userId}")
+    public Result updateFridgeInventoryFromSmartFridge(@PathVariable Long userId, @RequestBody List<ItemDTO> updatedItemsDTO) {
+        User user = new User(); // You need to get the user based on the userId
+        List<Item> updatedItems = updatedItemsDTO.stream()
+                .map(itemMapper::convertToItem)
+                .collect(Collectors.toList());
+        itemService.updateFridgeInventoryFromSmartFridge(user, updatedItems);
+        return new Result(true, StatusCode.SUCCESS, "Fridge Inventory Updated");
     }
 
 

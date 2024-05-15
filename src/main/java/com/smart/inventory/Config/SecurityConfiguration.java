@@ -36,6 +36,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -82,9 +83,9 @@ public class SecurityConfiguration {
 //    }
     public CorsConfigurationSource corsConfigurationSource() { // CORS Configuration
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -124,6 +125,12 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.GET, this.baseUrl + "/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/items/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+
+                                // Shared Fridge Permissions
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/shared-fridge/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/shared-fridge/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/shared-fridge/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/shared-fridge/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
                                 //Allow swaggerUI with path "http://localhost:8080/swagger-ui/index.html"
                                 .requestMatchers("/swagger-ui/**","/v3/**").permitAll()

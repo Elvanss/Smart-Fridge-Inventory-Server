@@ -13,54 +13,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+// FridgeInventory.java
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "Fridge")
+@Table(name = "FridgeInventory")
 public class FridgeInventory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "location", nullable = false)
-    private String location;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "shared_fridge_id", referencedColumnName = "id")
+    private SharedFridge sharedFridge;
 
-    @Column(name = "capacity", nullable = false)
-    private Integer capacity;
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private Profile profile;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fridge", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "fridge")
-    private List<Item> item = new ArrayList<>();
-
-    @OneToOne
-    @NotNull(message = "User is required")
-    private User user;
-
-    // The size of items in number
-    private Integer numberOfItems() {
-        if (this.item == null) {
-            return 0;
-        } else if (this.item.size() > 300) {
-            throw new RuntimeException("Fridge is full");
-        }
-        return this.item.size();
-    }
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "fridgeInventory")
+    private List<Item> items = new ArrayList<>();
 
     public void addItem(Item item) {
-        item.setFridge(this);
-        this.item.add(item);
+        item.setFridgeInventory(this);
+        this.items.add(item);
     }
 
-    public void removeItem(Item itemToBeAssigned) {
-        itemToBeAssigned.setFridge(null);
-        this.item.remove(itemToBeAssigned);
+    public void removeItem(Item itemToBeRemoved) {
+        itemToBeRemoved.setFridgeInventory(null);
+        this.items.remove(itemToBeRemoved);
     }
 
     public void removeItems() {
-        this.item.forEach(item -> item.setFridge(null));
-        this.item = new ArrayList<>();
+        this.items.forEach(item -> item.setFridgeInventory(null));
+        this.items = new ArrayList<>();
     }
 
+    public Integer getNumberOfItems() {
+        return this.items.size();
+    }
 }

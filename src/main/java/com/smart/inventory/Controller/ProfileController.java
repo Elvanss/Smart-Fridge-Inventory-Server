@@ -2,6 +2,7 @@ package com.smart.inventory.Controller;
 
 
 import com.smart.inventory.DTO.ProfileDTO;
+import com.smart.inventory.Entity.Item;
 import com.smart.inventory.Entity.Profile;
 import com.smart.inventory.Mapper.ProfileMapper;
 import com.smart.inventory.Service.ProfileService;
@@ -24,7 +25,7 @@ public class ProfileController {
         this.profileMapper = profileMapper;
     }
 
-    // Get all profiles for a user.
+    // Requirement 1: Get all profiles for a user.
     @GetMapping("/users/{userId}")
     public Result findAllProfiles(@PathVariable Long userId) {
         List<Profile> foundProfile = this.profileService.getAllProfilesForUser(userId);
@@ -37,7 +38,7 @@ public class ProfileController {
     }
 
 
-    // Get a profile by id.
+    // Requirement 1: Get a profile by id.
     @GetMapping("/{profileId}")
     public Result findProfileById(@PathVariable Long profileId) {
         Profile foundProfile = this.profileService.getProfileById(profileId);
@@ -45,16 +46,24 @@ public class ProfileController {
         return new Result(true, StatusCode.SUCCESS, "Find One Success", profileDto);
     }
 
-    // Add a profile for a user.
-    @PostMapping("/{userId}")
-    public Result addProfile(@PathVariable Long userId, @RequestBody ProfileDTO profileDTO) {
+    // Requirement 1: Get a profile by user id.
+//    @GetMapping("/users/{userId}")
+    public Result findProfileByUserId(@PathVariable Long userId) {
+        Profile foundProfile = this.profileService.getProfileByUserId(userId);
+        ProfileDTO profileDto = this.profileMapper.convertToDto(foundProfile);
+        return new Result(true, StatusCode.SUCCESS, "Find One Success", profileDto);
+    }
+
+    // Requirement 1: Add a profile for a user.
+    @PostMapping("/add")
+    public Result addProfile( @RequestBody ProfileDTO profileDTO) {
         Profile newProfile = this.profileMapper.convertToEntity(profileDTO);
-        Profile savedProfile = this.profileService.createProfile(userId, newProfile);
+        Profile savedProfile = this.profileService.createProfile(newProfile);
         ProfileDTO savedProfileDto = this.profileMapper.convertToDto(savedProfile);
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedProfileDto);
     }
 
-    // Update a profile.
+    // Requirement 1: Update a profile.
     @PutMapping("/{profileId}")
     public Result updateProfile(@PathVariable Long profileId, @RequestBody ProfileDTO profileDto) {
         Profile update = this.profileMapper.convertToEntity(profileDto);
@@ -63,7 +72,7 @@ public class ProfileController {
         return new Result(true, StatusCode.SUCCESS, "Update Success", updatedProfileDto);
     }
 
-    // Delete a profile.
+    // Requirement 1:  Delete a profile.
     @DeleteMapping("/delete/{profileId}")
     public Result deleteProfile(@PathVariable Long profileId) {
         this.profileService.delete(profileId);

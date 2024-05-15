@@ -2,17 +2,16 @@ package com.smart.inventory.Entity;
 
 import com.smart.inventory.Entity.Type.RoleList;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+        import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+// User.java
 @Entity
 @Getter
 @Setter
@@ -41,10 +40,12 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Profile> profiles = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private SharedFridge sharedFridge;
 
-    /**
-     * Other Resolved Methods for User Entity
-     */
+    public List<FridgeInventory> getAllFridgeInventoriesInSharedFridge() {
+        return sharedFridge.getFridgeInventories();
+    }
 
     // Add Profile
     public void addProfile(Profile profile) {
@@ -62,7 +63,4 @@ public class User implements Serializable {
     public int getNumberOfProfiles() {
         return profiles.size();
     }
-
-
-
 }

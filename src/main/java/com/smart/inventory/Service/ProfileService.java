@@ -1,5 +1,6 @@
 package com.smart.inventory.Service;
 
+import com.smart.inventory.Entity.Item;
 import com.smart.inventory.Entity.User;
 import com.smart.inventory.Entity.Profile;
 import com.smart.inventory.Repository.FridgeInventoryRepository;
@@ -10,30 +11,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
-    private final FridgeInventoryRepository fridgeRepository;
 
     public ProfileService(ProfileRepository profileRepository,
-                          UserRepository userRepository,
-                          FridgeInventoryRepository fridgeRepository) {
+                          UserRepository userRepository) {
 
         this.profileRepository = profileRepository;
         this.userRepository = userRepository;
-        this.fridgeRepository = fridgeRepository;
     }
 
     // Create Profile
-    public Profile createProfile(Long userId, Profile profile) {
+    public Profile createProfile(Profile profile) {
         profile.setName(profile.getName());
         profile.setAge(profile.getAge());
         profile.setDietary(profile.getDietary());
         profile.setAllergies(profile.getAllergies());
         profile.setDescription(profile.getDescription());
         return this.profileRepository.save(profile);
+    }
+
+    public List<Profile> getProfilesForUser(User user) {
+        return user.getProfiles();
     }
 
     // Updated Profile
@@ -45,7 +48,6 @@ public class ProfileService {
     profileIn.setDietary(updatedProfile.getDietary());
     profileIn.setAllergies(updatedProfile.getAllergies());
     profileIn.setDescription(updatedProfile.getDescription());
-
     return this.profileRepository.save(profileIn);
 }
 
@@ -62,15 +64,19 @@ public class ProfileService {
         return user.getProfiles();
     }
 
+    // Delete Profile
     @Transactional
     public void delete(Long profileId) {
         Profile profile = this.profileRepository.findById(profileId)
                 .orElseThrow(() -> new ObjectNotFoundException("Profile Not Found!", profileId));
-
-        // Delete all Fridge entities that reference the Profile entity
-        this.fridgeRepository.deleteByProfile(profile);
-
-        // Now you can delete the Profile entity
+        profile.getUser().removeProfile(profile);
         this.profileRepository.deleteById(profileId);
     }
+
+
+    public Profile getProfileByUserId(Long userId) {
+        return this.profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("Profile not found with user id: ", userId));
+    }
+
 }

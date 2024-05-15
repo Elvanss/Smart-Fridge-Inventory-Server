@@ -14,7 +14,6 @@ public class ProfileMapper {
     }
 
     public ProfileDTO convertToDto(Profile source) {
-        // We are not setting password in DTO.
         ProfileDTO profileDTO = new ProfileDTO();
         profileDTO.setId(source.getId());
         profileDTO.setName(source.getName());
@@ -22,6 +21,9 @@ public class ProfileMapper {
         profileDTO.setDietary(source.getDietary());
         profileDTO.setAllergies(source.getAllergies());
         profileDTO.setDescription(source.getDescription());
+        profileDTO.setUser(source.getUser() != null
+                ? this.userMapper.convertToDto(source.getUser())
+                : null);
         return profileDTO;
     }
 

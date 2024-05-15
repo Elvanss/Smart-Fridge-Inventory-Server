@@ -21,13 +21,15 @@ public class MealController {
     private final MealMapper mealMapper;
     private final FileStorageService fileStorageService;
 
-    public MealController(MealService mealService, MealMapper mealMapper, FileStorageService fileStorageService) {
+    public MealController(MealService mealService,
+                          MealMapper mealMapper,
+                          FileStorageService fileStorageService) {
         this.mealService = mealService;
         this.mealMapper = mealMapper;
         this.fileStorageService = fileStorageService;
     }
 
-    // Get all meals
+    // Requirement 3: Get all meals
     @GetMapping
     public Result getMeals() {
         List<Meal> meals = this.mealService.findAll();
@@ -38,7 +40,7 @@ public class MealController {
         return new Result(true, StatusCode.SUCCESS, "All Meals", meals);
     }
 
-    // Find a meal by id
+    // Requirement 3: Find a meal by id
     @GetMapping("/{id}")
     public Result getMealById(@PathVariable Long id) {
         Meal meal = this.mealService.findById(id);
@@ -46,7 +48,18 @@ public class MealController {
         return new Result(true, StatusCode.SUCCESS, "Meal Found", mealDTO);
     }
 
-    // Add a meal
+    // Requirement 3: Search meal by name
+    @GetMapping("/search")
+    public Result searchMeal(@RequestParam("name") String name) {
+        List<Meal> meals = this.mealService.searchingMeal(name);
+        List<MealDTO> mealDTOS = meals.stream()
+            .map(mealMapper::convertToDto)
+            .toList();
+
+        return new Result(true, StatusCode.SUCCESS, "Meals Found", mealDTOS);
+    }
+
+    //Requirement 3: Add a meal
     @PostMapping("/add")
     public Result addMeal(@RequestParam("file") MultipartFile file, @RequestBody MealDTO mealDTO) throws IOException {
         String imageUrl = fileStorageService.storeFile(file); // Store the file and get the URL
@@ -57,7 +70,7 @@ public class MealController {
         return new Result(true, StatusCode.SUCCESS, "Meal Added", newMealDTO);
     }
 
-    // Update a meal
+    // Admin: Update a meal
     @PutMapping("/update/{id}")
     public Result updateMeal(@PathVariable Long id, @RequestBody MealDTO mealDTO) {
         Meal meal = this.mealMapper.convertToEntity(mealDTO);
@@ -66,16 +79,18 @@ public class MealController {
         return new Result(true, StatusCode.SUCCESS, "Meal Updated", updatedMealDTO);
     }
 
-    // Delete a meal
+    // Admin: Delete a meal
     @DeleteMapping("/delete/{id}")
     public Result deleteMeal(@PathVariable Long id) {
         this.mealService.delete(id);
         return new Result(true, StatusCode.SUCCESS, "Meal Deleted");
     }
 
-    // Get meal suggestion
+    // Requirement 3: Get meal suggestion
     @GetMapping("/suggestion")
-    public Result getMealSuggestion(@RequestParam List<String> items, @RequestParam("days") Integer days, @RequestParam("maxMealPerDays") Integer maxMealPerDays) {
+    public Result getMealSuggestion(@RequestParam List<String> items,
+                                    @RequestParam("days") Integer days,
+                                    @RequestParam("maxMealPerDays") Integer maxMealPerDays) {
         List<Meal> meals = this.mealService.getMealSuggestion(items, days, maxMealPerDays);
         List<MealDTO> mealDTOS = meals.stream()
             .map(mealMapper::convertToDto)
@@ -83,4 +98,13 @@ public class MealController {
 
         return new Result(true, StatusCode.SUCCESS, "Suggested Meals", mealDTOS);
     }
+
+    // Requirement 3: Add meal to favorite
+    @PostMapping("/add-to-favorite")
+    public Result addMealToFavorite(@RequestParam("mealId") Long mealId,
+                                    @RequestParam("profileId") Long id) {
+       this.mealService.assignedMealToProfile(mealId, id);
+       return new Result(true, StatusCode.SUCCESS, "Meal Added to Favorite");
+    }
+
 }

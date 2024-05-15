@@ -18,10 +18,13 @@ public class ItemDTO {
     private String category;
     private Integer stock;
     private Double calories;
+    private Double protein;
+    private Double fat;
     private StockStatus stockStatus;
     private LocalDate purchaseDate;
     private LocalDate expiryDate;
     private Long daysLeft;
     private String description;
-//    private FridgeInventoryDTO fridge;
+    private FridgeInventoryDTO fridgeInventory;
+    private Integer numberOfConsumptionRecords;
 }

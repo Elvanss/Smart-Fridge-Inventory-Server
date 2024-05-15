@@ -36,24 +36,16 @@ public class FridgeInventoryService {
 
     // Add a new method to save a fridge inventory.
     public FridgeInventory saveFridgeInventory(FridgeInventory fridgeInventory) {
-        FridgeInventory newFridgeInventory = new FridgeInventory();
-        newFridgeInventory.setLocation(fridgeInventory.getLocation());
-        newFridgeInventory.setCapacity(fridgeInventory.getCapacity());
-        newFridgeInventory.setItem(fridgeInventory.getItem());
-        newFridgeInventory.setUser(fridgeInventory.getUser());
-        return this.fridgeInventoryRepository.save(newFridgeInventory);
+        return this.fridgeInventoryRepository.save(fridgeInventory);
     }
 
-    // Add a new method to update a fridge inventory.
     public FridgeInventory updateFridgeInventory(Long id, FridgeInventory fridgeInventory) {
         FridgeInventory existingFridgeInventory = this.fridgeInventoryRepository.findById(id).orElse(null);
         if (existingFridgeInventory == null) {
             return null;
         }
-        existingFridgeInventory.setLocation(fridgeInventory.getLocation());
-        existingFridgeInventory.setCapacity(fridgeInventory.getCapacity());
-        existingFridgeInventory.setItem(fridgeInventory.getItem());
-        existingFridgeInventory.setUser(fridgeInventory.getUser());
+        existingFridgeInventory.setSharedFridge(fridgeInventory.getSharedFridge());
+        existingFridgeInventory.setItems(fridgeInventory.getItems());
         return this.fridgeInventoryRepository.save(existingFridgeInventory);
     }
 
@@ -65,45 +57,45 @@ public class FridgeInventoryService {
         this.fridgeInventoryRepository.deleteById(id);
     }
 
-    // Assign an item to a fridge inventory.
-    public void assignItem(Long fridgeInventoryId, Long itemId) {
-
-        // Find this item by Id from DB.
-        Item itemToBeAssigned  = this.itemRepository.findById(itemId)
-                .orElseThrow(()-> new ObjectNotFoundException("Item Not Found! ", itemId));
-
-        // Find this fridge inventory by Id from DB.
-        FridgeInventory fridgeInventory = this.fridgeInventoryRepository.findById(fridgeInventoryId)
-                    .orElseThrow(()-> new ObjectNotFoundException("Fridge Inventory Not Found! ", fridgeInventoryId));
-
-        // Item assignment
-        if (itemToBeAssigned.getFridge() != null) {
-            itemToBeAssigned.getFridge().removeItem(itemToBeAssigned);
-        }
-
-        // Add the item to the fridge inventory.
-        fridgeInventory.addItem(itemToBeAssigned);
-        this.fridgeInventoryRepository.save(fridgeInventory);
-    }
-
-    public void assignItemsToFridge(Long fridgeInventoryId, List<Long> itemIds) {
-        FridgeInventory fridgeInventory = fridgeInventoryRepository.findById(fridgeInventoryId)
-            .orElseThrow(() -> new ObjectNotFoundException("Fridge Inventory Not Found! ", fridgeInventoryId));
-
-        List<Item> items = itemIds.stream()
-            .map(itemId -> itemRepository.findById(itemId)
-                .orElseThrow(() -> new ObjectNotFoundException("Item Not Found! ", itemId)))
-            .toList();
-
-        items.forEach(item -> {
-            if (item.getFridge() != null) {
-                item.getFridge().removeItem(item);
-            }
-            fridgeInventory.addItem(item);
-        });
-
-        this.fridgeInventoryRepository.save(fridgeInventory);
-    }
+//    // Assign an item to a fridge inventory.
+//    public void assignItem(Long fridgeInventoryId, Long itemId) {
+//
+//        // Find this item by Id from DB.
+//        Item itemToBeAssigned  = this.itemRepository.findById(itemId)
+//                .orElseThrow(()-> new ObjectNotFoundException("Item Not Found! ", itemId));
+//
+//        // Find this fridge inventory by Id from DB.
+//        FridgeInventory fridgeInventory = this.fridgeInventoryRepository.findById(fridgeInventoryId)
+//                    .orElseThrow(()-> new ObjectNotFoundException("Fridge Inventory Not Found! ", fridgeInventoryId));
+//
+//        // Item assignment
+//        if (itemToBeAssigned.getFridgeInventory() != null) {
+//            itemToBeAssigned.getFridgeInventory().removeItem(itemToBeAssigned);
+//        }
+//
+//        // Add the item to the fridge inventory.
+//        fridgeInventory.addItem(itemToBeAssigned);
+//        this.fridgeInventoryRepository.save(fridgeInventory);
+//    }
+//
+//    public void assignItemsToFridge(Long fridgeInventoryId, List<Long> itemIds) {
+//        FridgeInventory fridgeInventory = fridgeInventoryRepository.findById(fridgeInventoryId)
+//            .orElseThrow(() -> new ObjectNotFoundException("Fridge Inventory Not Found! ", fridgeInventoryId));
+//
+//        List<Item> items = itemIds.stream()
+//            .map(itemId -> itemRepository.findById(itemId)
+//                .orElseThrow(() -> new ObjectNotFoundException("Item Not Found! ", itemId)))
+//            .toList();
+//
+//        items.forEach(item -> {
+//            if (item.getFridgeInventory() != null) {
+//                item.getFridgeInventory().removeItem(item);
+//            }
+//            fridgeInventory.addItem(item);
+//        });
+//
+//        this.fridgeInventoryRepository.save(fridgeInventory);
+//    }
 
 
 

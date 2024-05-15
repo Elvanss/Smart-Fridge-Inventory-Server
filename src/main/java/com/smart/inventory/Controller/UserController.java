@@ -1,12 +1,12 @@
 package com.smart.inventory.Controller;
 
 import com.smart.inventory.DTO.UserDTO;
-import com.smart.inventory.Entity.Type.RoleList;
 import com.smart.inventory.Entity.User;
 import com.smart.inventory.Mapper.UserMapper;
 import com.smart.inventory.Service.UserService;
 import com.smart.inventory.System.Result;
 import com.smart.inventory.System.StatusCode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,71 +14,59 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    private final UserMapper userMapper; // Convert user to userDto.
+    @Autowired
+    private UserMapper userMapper;
 
+    // Admin Side: Get all users.
+    @GetMapping
+    public Result getUsers() {
+        List<User> users = userService.findAll();
+        List<UserDTO> userDTOS = users.stream()
+                .map(userMapper::convertToDto)
+                .collect(Collectors.toList());
+        return new Result(true, StatusCode.SUCCESS, "All Users", userDTOS);
+    }
 
-    public UserController(UserService userService, UserMapper userMapper) {
-        this.userService = userService;
-        this.userMapper = userMapper;
+    @GetMapping("/{userId}")
+    public Result getUserById(@PathVariable Long userId) {
+        User user = userService.findById(userId);
+        UserDTO userDTO = userMapper.convertToDto(user);
+        return new Result(true, StatusCode.SUCCESS, "User Found", userDTO);
     }
 
     // Register a new user.
     @PostMapping("/register")
-    public Result register(@RequestBody UserDTO userDTO) {
+    public Result registerUser(@RequestBody UserDTO userDTO) {
         User newUser = this.userMapper.convertToEntity(userDTO);
         User savedUser = this.userService.save(newUser);
         UserDTO savedUserDto = this.userMapper.convertToDto(savedUser);
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedUserDto);
     }
 
-    // Get all users.
-    @GetMapping
-    public Result findAllUsers() {
-        List<User> foundUser = this.userService.findAll();
-
-
-        List<UserDTO> userDtos = foundUser.stream() // Convert the list to a stream.
-                .map(this.userMapper::convertToDto) // Convert each item to UserDto.
-                .collect(Collectors.toList()); // Collect the stream to a list.
-
-        // Note that UserDto does not contain password field.
-        return new Result(true, StatusCode.SUCCESS, "Find All Success", userDtos);
-    }
-
-    // Get a user by id.
-    @GetMapping("/{userId}")
-    public Result findUserById(@PathVariable Long userId) {
-        User foundUser = this.userService.findById(userId);
-        UserDTO userDto = this.userMapper.convertToDto(foundUser);
-        return new Result(true, StatusCode.SUCCESS, "Find One Success", userDto);
-    }
-
-    // We are not using this to update password, need another changePassword method in this class.
+    // Requirement 1: Update a user.
     @PutMapping("/update/{userId}")
-    public Result updateUser(@PathVariable Long userId, @RequestBody UserDTO userDto) {
-        User update = this.userMapper.convertToEntity(userDto);
-        User updatedUser = this.userService.update(userId, update);
-        UserDTO updatedUserDto = this.userMapper.convertToDto(updatedUser);
-        return new Result(true, StatusCode.SUCCESS, "Update Success", updatedUserDto);
+    public Result updateUser(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
+        User user = userMapper.convertToEntity(userDTO);
+        User updatedUser = userService.update(userId, user);
+        UserDTO updatedUserDTO = userMapper.convertToDto(updatedUser);
+        return new Result(true, StatusCode.SUCCESS, "User Updated", updatedUserDTO);
     }
 
-    // Change password.
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/delete/{userId}")
     public Result deleteUser(@PathVariable Long userId) {
-        this.userService.delete(userId);
-        return new Result(true, StatusCode.SUCCESS, "Delete Success");
+        userService.delete(userId);
+        return new Result(true, StatusCode.SUCCESS, "User Deleted");
     }
 
-    // Assign Profile to User
-    @PutMapping("/{userId}/assign/{profileId}")
+    // Requirement 1: Assign a profile to a user.
+    @PostMapping("/assignProfile/{userId}/{profileId}")
     public Result assignProfileToUser(@PathVariable Long userId, @PathVariable Long profileId) {
-        this.userService.assignProfileToUser(userId, profileId);
+        userService.assignProfileToUser(userId, profileId);
         return new Result(true, StatusCode.SUCCESS, "Profile Assigned to User");
     }
-
 }

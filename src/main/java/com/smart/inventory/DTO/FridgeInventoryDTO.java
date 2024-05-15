@@ -13,9 +13,6 @@ import java.util.List;
 @Setter
 public class FridgeInventoryDTO {
     private Long id;
-    private String location;
-    private Integer capacity;
-    private Long userId;
-//    private Integer numberOfItems;
-    private List<ItemDTO> items; // Add this line
+    private SharedFridgeDTO sharedFridge;
+    private Integer numberOfItems;
 }

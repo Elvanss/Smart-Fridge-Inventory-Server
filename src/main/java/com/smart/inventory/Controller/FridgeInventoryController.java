@@ -32,7 +32,7 @@ public class FridgeInventoryController {
     public Result getAllFridgeInventory() {
         List<FridgeInventory> fridgeInventories = this.fridgeInventoryService.getAllFridgeInventory();
         return new Result(true, StatusCode.SUCCESS, "Find Fridge Success", fridgeInventories.stream()
-                .map(fridgeInventoryMapper::convertToFridgeInventoryDTO)
+                .map(fridgeInventoryMapper::toFridgeInventoryDTO)
                 .collect(Collectors.toList()));
 
     }
@@ -41,24 +41,24 @@ public class FridgeInventoryController {
     @GetMapping("/{id}")
     public Result getFridgeInventoryById(@PathVariable Long id) {
         FridgeInventory fridgeInventory = this.fridgeInventoryService.getFridgeInventoryById(id);
-        FridgeInventoryDTO fridgeInventoryDTO = fridgeInventoryMapper.convertToFridgeInventoryDTO(fridgeInventory);
+        FridgeInventoryDTO fridgeInventoryDTO = fridgeInventoryMapper.toFridgeInventoryDTO(fridgeInventory);
         return new Result(true, StatusCode.SUCCESS, "Find One Success", fridgeInventoryDTO);
     }
 
-    @PutMapping("/assign/{fridgeId}/{itemId}")
-    public Result assignItemToFridge(@PathVariable Long fridgeId, @PathVariable Long itemId) {
-        this.fridgeInventoryService.assignItem(fridgeId, itemId);
-        return new Result(true, StatusCode.SUCCESS,  "Item " + itemId + " Assigned to Fridge " + fridgeId, null);
-    }
-
-    @PutMapping("assigns/{fridgeId}/{itemIds}")
-    public Result assignItemsToFridge(@PathVariable Long fridgeId, @PathVariable String itemIds) {
-        List<Long> itemIdList = Arrays.stream(itemIds.split("-"))
-            .map(Long::valueOf)
-            .collect(Collectors.toList());
-        this.fridgeInventoryService.assignItemsToFridge(fridgeId, itemIdList);
-        return new Result(true, StatusCode.SUCCESS, "Items Assigned to Fridge " + fridgeId, null);
-}
+//    @PutMapping("/assign/{fridgeId}/{itemId}")
+//    public Result assignItemToFridge(@PathVariable Long fridgeId, @PathVariable Long itemId) {
+//        this.fridgeInventoryService.assignItem(fridgeId, itemId);
+//        return new Result(true, StatusCode.SUCCESS,  "Item " + itemId + " Assigned to Fridge " + fridgeId, null);
+//    }
+//
+//    @PutMapping("assigns/{fridgeId}/{itemIds}")
+//    public Result assignItemsToFridge(@PathVariable Long fridgeId, @PathVariable String itemIds) {
+//        List<Long> itemIdList = Arrays.stream(itemIds.split("-"))
+//            .map(Long::valueOf)
+//            .collect(Collectors.toList());
+//        this.fridgeInventoryService.assignItemsToFridge(fridgeId, itemIdList);
+//        return new Result(true, StatusCode.SUCCESS, "Items Assigned to Fridge " + fridgeId, null);
+//}
 
 
 

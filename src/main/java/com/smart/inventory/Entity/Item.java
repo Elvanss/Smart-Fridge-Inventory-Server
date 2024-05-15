@@ -10,13 +10,16 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
+// Item.java
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name = "Item")
 public class Item implements Serializable {
 
@@ -36,6 +39,12 @@ public class Item implements Serializable {
     @Column(name = "calories")
     private Double calories;
 
+    @Column(name = "protein")
+    private Double protein;
+
+    @Column(name = "fat")
+    private Double fat;
+
     @Column(name = "stock_status")
     @Enumerated(EnumType.STRING)
     private StockStatus stockStatus;
@@ -51,11 +60,31 @@ public class Item implements Serializable {
 
     private String description;
 
-    @ManyToOne
-    private FridgeInventory fridge;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fridge_inventory_id", referencedColumnName = "id")
+    private FridgeInventory fridgeInventory;
 
-//    @ManyToOne
-//    @JoinColumn(name = "member_fridge_area_id", referencedColumnName = "id")
-//    private MemberFridgeArea memberFridgeArea;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ConsumptionRecord> consumptionRecords = new ArrayList<>();
+
+    public void addConsumptionRecord(ConsumptionRecord consumptionRecord) {
+        consumptionRecords.add(consumptionRecord);
+        consumptionRecord.setItem(this);
+    }
+
+    public void removeConsumptionRecord(ConsumptionRecord consumptionRecord) {
+        consumptionRecords.remove(consumptionRecord);
+        consumptionRecord.setItem(null);
+    }
+
+    public void removeAllConsumptionRecords() {
+        consumptionRecords.forEach(consumptionRecord -> consumptionRecord.setItem(null));
+        consumptionRecords.clear();
+    }
+
+    public Integer getNumberOfConsumptionRecords() {
+        return this.consumptionRecords.size();
+    }
+
 
 }

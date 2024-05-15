@@ -42,5 +42,8 @@ public class Meal {
     @Column(length = 1000)
     private String cookingMethod;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Profile> profiles = new ArrayList<>();
+
 }
 

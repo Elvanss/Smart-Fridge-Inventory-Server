@@ -10,37 +10,27 @@ import java.util.stream.Collectors;
 @Component
 public class FridgeInventoryMapper {
 
-    private final ItemMapper itemMapper;
+    private final ShareFridgeMapper sharedFridgeMapper;
 
-    public FridgeInventoryMapper(ItemMapper itemMapper) {
-        this.itemMapper = itemMapper;
+    public FridgeInventoryMapper(ShareFridgeMapper sharedFridgeMapper) {
+        this.sharedFridgeMapper = sharedFridgeMapper;
     }
 
-    public FridgeInventoryDTO convertToFridgeInventoryDTO(FridgeInventory fridgeInventory) {
+    public FridgeInventoryDTO toFridgeInventoryDTO(FridgeInventory fridgeInventory) {
         FridgeInventoryDTO fridgeInventoryDTO = new FridgeInventoryDTO();
         fridgeInventoryDTO.setId(fridgeInventory.getId());
-        fridgeInventoryDTO.setLocation(fridgeInventory.getLocation());
-        fridgeInventoryDTO.setCapacity(fridgeInventory.getCapacity());
-        fridgeInventoryDTO.setUserId(fridgeInventory.getUser().getId());
-//        fridgeInventoryDTO.setNumberOfItems(fridgeInventory.getNumberOfItems());
-        fridgeInventoryDTO.setItems(fridgeInventory.getItem().stream()
-                .map(itemMapper::convertToItemDTO)
-                .collect(Collectors.toList()));
+        fridgeInventoryDTO.setSharedFridge(fridgeInventory.getSharedFridge() != null
+                ? this.sharedFridgeMapper.toSharedFridgeDTO(fridgeInventory.getSharedFridge())
+                : null);
+        fridgeInventoryDTO.setNumberOfItems(fridgeInventory.getNumberOfItems());
         return fridgeInventoryDTO;
     }
 
-
-
-//    private FridgeInventoryDTO convertToFridgeInventoryDTO(FridgeInventory fridgeInventory) {
-//        FridgeInventoryDTO fridgeInventoryDTO = new FridgeInventoryDTO();
-//        fridgeInventoryDTO.setId(fridgeInventory.getId());
-//        fridgeInventoryDTO.setLocation(fridgeInventory.getLocation());
-//        fridgeInventoryDTO.setCapacity(fridgeInventory.getCapacity());
-//        fridgeInventoryDTO.setUserId(fridgeInventory.getUser().getId());
-//        fridgeInventoryDTO.setNumberOfItems(fridgeInventory.getNumberOfItems());
-//        fridgeInventoryDTO.setItems(fridgeInventory.getItem().stream()
-//                .map(this::convertToItemDTO)
-//                .collect(Collectors.toList()));
-//        return fridgeInventoryDTO;
-//    }
+    public FridgeInventory toFridgeInventory(FridgeInventoryDTO fridgeInventoryDTO) {
+        FridgeInventory fridgeInventory = new FridgeInventory();
+        fridgeInventory.setSharedFridge(fridgeInventoryDTO.getSharedFridge() != null
+                ? this.sharedFridgeMapper.toSharedFridge(fridgeInventoryDTO.getSharedFridge())
+                : null);
+        return fridgeInventory;
+    }
 }
