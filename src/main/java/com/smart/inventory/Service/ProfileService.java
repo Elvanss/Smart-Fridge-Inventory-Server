@@ -2,10 +2,12 @@ package com.smart.inventory.Service;
 
 import com.smart.inventory.Entity.User;
 import com.smart.inventory.Entity.Profile;
+import com.smart.inventory.Repository.FridgeInventoryRepository;
 import com.smart.inventory.Repository.ProfileRepository;
 import com.smart.inventory.Repository.UserRepository;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,12 +15,15 @@ import java.util.List;
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
+    private final FridgeInventoryRepository fridgeRepository;
 
     public ProfileService(ProfileRepository profileRepository,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          FridgeInventoryRepository fridgeRepository) {
 
         this.profileRepository = profileRepository;
         this.userRepository = userRepository;
+        this.fridgeRepository = fridgeRepository;
     }
 
     // Create Profile
@@ -57,7 +62,15 @@ public class ProfileService {
         return user.getProfiles();
     }
 
-    public void delete(Long id) {
-        profileRepository.deleteById(id);
+    @Transactional
+    public void delete(Long profileId) {
+        Profile profile = this.profileRepository.findById(profileId)
+                .orElseThrow(() -> new ObjectNotFoundException("Profile Not Found!", profileId));
+
+        // Delete all Fridge entities that reference the Profile entity
+        this.fridgeRepository.deleteByProfile(profile);
+
+        // Now you can delete the Profile entity
+        this.profileRepository.deleteById(profileId);
     }
 }

@@ -3,6 +3,7 @@ package com.smart.inventory.Service;
 import com.smart.inventory.Entity.Profile;
 import com.smart.inventory.Entity.Type.RoleList;
 import com.smart.inventory.Entity.User;
+import com.smart.inventory.Repository.FridgeInventoryRepository;
 import com.smart.inventory.Repository.ProfileRepository;
 import com.smart.inventory.Repository.UserRepository;
 import org.hibernate.ObjectNotFoundException;
@@ -19,12 +20,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProfileRepository profileRepository;
+    private final FridgeInventoryRepository fridgeRepository;
 
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProfileRepository profileRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProfileRepository profileRepository, FridgeInventoryRepository fridgeRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileRepository = profileRepository;
+        this.fridgeRepository = fridgeRepository;
     }
 
     public List<User> findAll() {
@@ -54,8 +57,10 @@ public class UserService {
     }
 
     public void delete(Long userId) {
-        this.userRepository.findById(userId)
+        User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("user not found!", userId));
+        // Delete all Fridge entities that reference the User entity
+        this.fridgeRepository.deleteByUser(user);
         this.userRepository.deleteById(userId);
     }
 
