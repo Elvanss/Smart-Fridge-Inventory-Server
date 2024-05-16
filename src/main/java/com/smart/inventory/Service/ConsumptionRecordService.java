@@ -1,21 +1,25 @@
 package com.smart.inventory.Service;
 
-import com.smart.inventory.Entity.ConsumptionRecord;
-import com.smart.inventory.Entity.Item;
-import com.smart.inventory.Entity.Profile;
-import com.smart.inventory.Entity.User;
+import com.smart.inventory.Entity.*;
 import com.smart.inventory.Repository.ConsumptionRecordRepository;
+import com.smart.inventory.Repository.ItemRepository;
+import com.smart.inventory.Repository.ProfileRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class ConsumptionRecordService {
 
     private final ConsumptionRecordRepository consumptionRecordRepository;
+    private final ProfileRepository profileRepository;
+    private final ItemRepository itemRepository;
 
-    public ConsumptionRecordService(ConsumptionRecordRepository consumptionRecordRepository) {
+    public ConsumptionRecordService(ConsumptionRecordRepository consumptionRecordRepository, ProfileRepository profileRepository, ItemRepository itemRepository) {
         this.consumptionRecordRepository = consumptionRecordRepository;
+        this.profileRepository = profileRepository;
+        this.itemRepository = itemRepository;
     }
 
     public ConsumptionRecord saveConsumptionRecord(ConsumptionRecord consumptionRecord) {
@@ -30,17 +34,34 @@ public class ConsumptionRecordService {
         return consumptionRecordRepository.findAllByProfile(profileId);
     }
 
-    public Item transferItemToComsumptionRecord(Profile profile, Item item, Integer quantity) {
+    // Requirement 4: Transfer item to consumption record
+    public void transferItemToComsumptionRecord(Long profileId, Long itemId, Integer quantity) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+        FridgeInventory fridgeInventory = profile.getFridgeInventory();
+        if (fridgeInventory == null) {
+            throw new RuntimeException("FridgeInventory not found");
+        }
+
+        Item item = fridgeInventory.getItems().stream() // get all items in the fridge
+                .filter(i -> i.getId().equals(itemId))// filter the item by id
+                .findFirst() // get the first item
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+
         ConsumptionRecord consumptionRecord = new ConsumptionRecord();
         consumptionRecord.setItem(item);
         consumptionRecord.setQuantity(quantity);
+        consumptionRecord.setConsumedAt(LocalDateTime.now());
+        consumptionRecord.setProfile(profile);
         profile.transferItemToConsumptionRecord(item, quantity);
-        return this.consumptionRecordRepository.save(consumptionRecord).getItem();
+        itemRepository.save(item);
+        this.consumptionRecordRepository.save(consumptionRecord);
     }
 
     // Requirement 2: Get all consumption records by user
-    public List<ConsumptionRecord> getAllConsumptionRecordsByUser(Long userId) {
-        return this.consumptionRecordRepository.findAllByUser(userId);
+    public List<ConsumptionRecord> getAllConsumptionRecordsByUser(User user) {
+        return this.consumptionRecordRepository.findAllByUser(user);
     }
 
     // Requirement 2: Get all consumption records by profile

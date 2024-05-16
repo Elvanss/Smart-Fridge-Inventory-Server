@@ -74,9 +74,8 @@ public class ProfileService {
     }
 
 
-    public Profile getProfileByUserId(Long userId) {
-        return this.profileRepository.findByUserId(userId)
-                .orElseThrow(() -> new ObjectNotFoundException("Profile not found with user id: ", userId));
+    public Profile getProfileByUserId(Long userId, Long profileId) {
+        return this.profileRepository.findProfileByUserId(userId, profileId);
     }
 
 }

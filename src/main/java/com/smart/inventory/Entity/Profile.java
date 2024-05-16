@@ -1,6 +1,7 @@
 package com.smart.inventory.Entity;
 
 import com.smart.inventory.Entity.Type.DietaryList;
+import io.swagger.models.auth.In;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,14 +46,15 @@ public class Profile implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(referencedColumnName = "id")
+    @PrimaryKeyJoinColumn
     private FridgeInventory fridgeInventory;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "profiles", cascade = CascadeType.ALL)
     private List<Meal> mealSaved = new ArrayList<>();
 
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConsumptionRecord> consumptionRecords = new ArrayList<>();
 
     @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -74,6 +76,11 @@ public class Profile implements Serializable {
         mealSaved = new ArrayList<>();
     }
 
+    public Integer numberOfSavedMeal() {
+        return this.mealSaved.size();
+    }
+
+// Requirement 2: Add an item to the fridge inventory
     public void addItemToFridgeInventory(Item item) {
         if (fridgeInventory == null) {
             User user = this.getUser();
@@ -137,4 +144,5 @@ public class Profile implements Serializable {
         }
         return progress;
     }
+
 }

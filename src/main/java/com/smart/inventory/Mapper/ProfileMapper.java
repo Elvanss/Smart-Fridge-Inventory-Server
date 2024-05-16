@@ -24,6 +24,7 @@ public class ProfileMapper {
         profileDTO.setUser(source.getUser() != null
                 ? this.userMapper.convertToDto(source.getUser())
                 : null);
+        profileDTO.setNumberOfSavedMeals(source.numberOfSavedMeal());
         return profileDTO;
     }
 

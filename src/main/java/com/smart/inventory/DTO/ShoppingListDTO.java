@@ -1,24 +1,23 @@
 package com.smart.inventory.DTO;
 
-import com.smart.inventory.Entity.Type.DietaryList;
+import com.smart.inventory.Entity.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ProfileDTO {
+public class ShoppingListDTO {
     private Long id;
     private String name;
-    private Integer age;
-    private DietaryList dietary;
-    private String Allergies;
+    private Map<String, Integer> items = new HashMap<>();
     private String description;
     private UserDTO user;
-    private int numberOfConsumptionRecords;
-    private NutritionTargetDTO nutritionTarget;
-    private Integer numberOfSavedMeals;
 }

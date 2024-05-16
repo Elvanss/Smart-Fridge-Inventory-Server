@@ -30,7 +30,7 @@ public class FridgeInventory {
     @JoinColumn(name = "shared_fridge_id", referencedColumnName = "id")
     private SharedFridge sharedFridge;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, optional = false)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;
 

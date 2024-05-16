@@ -73,14 +73,6 @@ public class SecurityConfiguration {
     }
 
     @Bean
-//    public CorsConfigurationSource corsConfigurationSource() { // CORS Configuration
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")) ;
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
     public CorsConfigurationSource corsConfigurationSource() { // CORS Configuration
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("*"));
@@ -131,6 +123,16 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/shared-fridge/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/shared-fridge/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/shared-fridge/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/consumption-records/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/consumption-records/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/consumption-records/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/consumption-records/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/meals/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/meals/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/meals/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/meals/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
                                 //Allow swaggerUI with path "http://localhost:8080/swagger-ui/index.html"
                                 .requestMatchers("/swagger-ui/**","/v3/**").permitAll()

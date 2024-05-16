@@ -2,9 +2,11 @@ package com.smart.inventory.Controller;
 
 import com.smart.inventory.DTO.MealDTO;
 import com.smart.inventory.Entity.Meal;
+import com.smart.inventory.Entity.Profile;
 import com.smart.inventory.Mapper.MealMapper;
 import com.smart.inventory.Service.FileStorageService;
 import com.smart.inventory.Service.MealService;
+import com.smart.inventory.Service.ProfileService;
 import com.smart.inventory.System.Result;
 import com.smart.inventory.System.StatusCode;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +22,15 @@ public class MealController {
     private final MealService mealService;
     private final MealMapper mealMapper;
     private final FileStorageService fileStorageService;
+    private final ProfileService profileService;
 
     public MealController(MealService mealService,
                           MealMapper mealMapper,
-                          FileStorageService fileStorageService) {
+                          FileStorageService fileStorageService, ProfileService profileService) {
         this.mealService = mealService;
         this.mealMapper = mealMapper;
         this.fileStorageService = fileStorageService;
+        this.profileService = profileService;
     }
 
     // Requirement 3: Get all meals
@@ -105,6 +109,23 @@ public class MealController {
                                     @RequestParam("profileId") Long id) {
        this.mealService.assignedMealToProfile(mealId, id);
        return new Result(true, StatusCode.SUCCESS, "Meal Added to Favorite");
+    }
+
+    @GetMapping("/favorite")
+    public Result getFavoriteMeals(@RequestParam("userId") Long userId, @RequestParam("profileId") Long profileId) {
+        Profile profile = profileService.getProfileByUserId(userId, profileId);
+        List<Meal> meals = this.mealService.getMealsByProfile(profile);
+        List<MealDTO> mealDTOS = meals.stream()
+            .map(mealMapper::convertToDto)
+            .toList();
+
+        return new Result(true, StatusCode.SUCCESS, "Favorite Meals", mealDTOS);
+    }
+
+    @DeleteMapping("/delete-from-favorite")
+    public Result deleteMealFromFavorite(@RequestParam("mealId") Long mealId, @RequestParam("profileId") Long profileId) {
+        this.mealService.deleteMealfromProfileFavorite(mealId, profileId);
+        return new Result(true, StatusCode.SUCCESS, "Meal Deleted from Favorite");
     }
 
 }

@@ -85,9 +85,9 @@ public class ItemController {
 
     // Requirement 2: Update item stock
     @PutMapping("/updateStock/{itemId}")
-    public Result updateItemStock(@PathVariable Long itemId, @RequestParam Integer newStock) {
+    public Result updateItemStock(@PathVariable Long itemId, @RequestParam Integer ItemTookNumber) {
         Item item = new Item(); // You need to get the item based on the itemId
-        itemService.updateItemStock(item, newStock);
+        itemService.updateItemStock(item, ItemTookNumber);
         return new Result(true, StatusCode.SUCCESS, "Item Stock Updated");
     }
 

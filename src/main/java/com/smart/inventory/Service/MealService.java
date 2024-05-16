@@ -116,6 +116,7 @@ public class MealService {
         return selectedMeals;
     }
 
+    // Requirement 3: Assign a meal to a profile
     public void assignedMealToProfile(Long mealId, Long profileId) {
         Meal mealToBeAssigned = this.mealRepository.findById(mealId)
                 .orElseThrow(() -> new ObjectNotFoundException("meal not found!", mealId));
@@ -123,10 +124,30 @@ public class MealService {
         Profile profile = this.profileRepository.findById(profileId)
                 .orElseThrow(() -> new ObjectNotFoundException("profile not found!", profileId));
 
+        if (profile.getMealSaved().contains(mealToBeAssigned)) {
+            throw new RuntimeException("Meal already assigned to profile");
+        }
+
         profile.addMealSaved(mealToBeAssigned);
+        profileRepository.save(profile);
     }
 
+    // Requirement 3: Get all meals by profile
     public List<Meal> getMealsByProfile(Profile profile) {
         return profile.getMealSaved();
+    }
+
+    public void deleteMealfromProfileFavorite(Long mealId, Long profileId) {
+        Meal meal = this.mealRepository.findById(mealId)
+                .orElseThrow(() -> new ObjectNotFoundException("meal not found!", mealId));
+
+        Profile profile = this.profileRepository.findById(profileId)
+                .orElseThrow(() -> new ObjectNotFoundException("profile not found!", profileId));
+
+        profile.removeMealSaved(meal);
+        meal.getProfiles().remove(profile); // Remove the profile from the meal's profiles list
+        profileRepository.save(profile);
+        mealRepository.save(meal);
+        profileRepository.save(profile);
     }
 }

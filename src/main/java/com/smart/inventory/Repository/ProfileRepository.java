@@ -12,4 +12,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     @Query("SELECT p FROM Profile p WHERE p.user.id = ?1")
     Optional<Profile> findByUserId(Long userId);
+
+    @Query("SELECT p FROM Profile p WHERE p.user.id = ?1 AND p.id = ?2")
+    Profile findProfileByUserId(Long userId, Long profileId);
 }

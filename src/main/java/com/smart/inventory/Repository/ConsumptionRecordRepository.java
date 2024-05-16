@@ -17,5 +17,5 @@ public interface ConsumptionRecordRepository extends JpaRepository<ConsumptionRe
     List<ConsumptionRecord> findAllByProfile(Long profileId);
 
     @Query("SELECT c FROM ConsumptionRecord c WHERE c.profile.user = ?1")
-    List<ConsumptionRecord> findAllByUser(Long userId);
+    List<ConsumptionRecord> findAllByUser(User user);
 }

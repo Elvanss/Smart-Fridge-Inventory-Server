@@ -48,8 +48,8 @@ public class ProfileController {
 
     // Requirement 1: Get a profile by user id.
 //    @GetMapping("/users/{userId}")
-    public Result findProfileByUserId(@PathVariable Long userId) {
-        Profile foundProfile = this.profileService.getProfileByUserId(userId);
+    public Result findProfileByUserId(@PathVariable Long userId, @PathVariable Long profileId) {
+        Profile foundProfile = this.profileService.getProfileByUserId(userId, profileId);
         ProfileDTO profileDto = this.profileMapper.convertToDto(foundProfile);
         return new Result(true, StatusCode.SUCCESS, "Find One Success", profileDto);
     }
