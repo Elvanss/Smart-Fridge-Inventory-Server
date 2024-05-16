@@ -30,5 +30,4 @@ public class NutritionTarget {
 
     @Column(name = "target_fat")
     private Integer targetFat;
-
 }

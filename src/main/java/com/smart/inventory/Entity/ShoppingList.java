@@ -16,7 +16,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "shopping_list")
+@Table(name = "shopping")
 public class ShoppingList {
 
     @Id
