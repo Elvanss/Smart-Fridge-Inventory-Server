@@ -359,7 +359,7 @@ public class DBInitializer implements CommandLineRunner {
         sharedFridge.addFridgeInventory(fridgeInventory3);
 //
 //
-        userService.save(user);
+        userService.saveInit(user);
         sharedFridgeInventory.save(sharedFridge);
 
 

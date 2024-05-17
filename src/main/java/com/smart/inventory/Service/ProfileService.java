@@ -1,10 +1,9 @@
 package com.smart.inventory.Service;
 
-import com.smart.inventory.Entity.Item;
-import com.smart.inventory.Entity.User;
-import com.smart.inventory.Entity.Profile;
+import com.smart.inventory.Entity.*;
 import com.smart.inventory.Repository.FridgeInventoryRepository;
 import com.smart.inventory.Repository.ProfileRepository;
+import com.smart.inventory.Repository.SharedFridgeRepository;
 import com.smart.inventory.Repository.UserRepository;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,23 +16,65 @@ import java.util.Map;
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
+    private final FridgeInventoryRepository fridgeInventoryRepository;
+    private final UserService userService;
+    private final SharedFridgeRepository sharedFridgeRepository;
 
     public ProfileService(ProfileRepository profileRepository,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          FridgeInventoryRepository fridgeInventoryRepository,
+                          UserService userService,
+                          SharedFridgeRepository sharedFridgeRepository) {
 
         this.profileRepository = profileRepository;
         this.userRepository = userRepository;
+        this.fridgeInventoryRepository = fridgeInventoryRepository;
+        this.userService = userService;
+        this.sharedFridgeRepository = sharedFridgeRepository;
     }
 
-    // Create Profile
-    public Profile createProfile(Profile profile) {
+    public Profile createProfile(Long userId, Profile profile) {
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found with id: ", userId));
+        profile = this.profileRepository.save(profile);
         profile.setName(profile.getName());
         profile.setAge(profile.getAge());
         profile.setDietary(profile.getDietary());
         profile.setAllergies(profile.getAllergies());
         profile.setDescription(profile.getDescription());
-        return this.profileRepository.save(profile);
+
+        // Create a new FridgeInventory and set it to the profile
+        FridgeInventory fridgeInventory = new FridgeInventory();
+        fridgeInventory.setProfile(profile);
+
+        SharedFridge sharedFridge = user.getSharedFridge();
+        if (sharedFridge == null) {
+            sharedFridge = new SharedFridge();
+            sharedFridge = sharedFridgeRepository.save(sharedFridge);
+            user.setSharedFridge(sharedFridge);
+            userRepository.save(user);
+        }
+        fridgeInventory.setSharedFridge(sharedFridge);
+        profile.setFridgeInventory(fridgeInventory);
+
+        // Assign the created profile to the user
+        userService.assignProfileToUser(user.getId(), profile.getId());
+        fridgeInventory = fridgeInventoryRepository.save(fridgeInventory);
+        return profile;
     }
+
+//    private void createFridgeInventory(User user, Profile profile) {
+//        FridgeInventory fridgeInventory = fridgeInventoryRepository.findById(profile.getFridgeInventory().getId())
+//            .orElseThrow(() -> new RuntimeException("FridgeInventory not found"));
+//
+//        // Fetch the SharedFridge from the database to ensure it's managed
+//        SharedFridge sharedFridge = sharedFridgeRepository.findById(user.getSharedFridge().getId())
+//            .orElseThrow(() -> new RuntimeException("SharedFridge not found"));
+//
+//        fridgeInventory.setSharedFridge(sharedFridge);
+//        fridgeInventory.setProfile(profile);
+//        fridgeInventoryRepository.save(fridgeInventory);
+//    }
 
     public List<Profile> getProfilesForUser(User user) {
         return user.getProfiles();
@@ -72,7 +113,6 @@ public class ProfileService {
         profile.getUser().removeProfile(profile);
         this.profileRepository.deleteById(profileId);
     }
-
 
     public Profile getProfileByUserId(Long userId, Long profileId) {
         return this.profileRepository.findProfileByUserId(userId, profileId);

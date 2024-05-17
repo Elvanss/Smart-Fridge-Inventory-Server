@@ -26,7 +26,7 @@ public class FridgeInventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "shared_fridge_id", referencedColumnName = "id")
     private SharedFridge sharedFridge;
 
