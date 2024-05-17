@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ProfileService {
@@ -61,6 +62,17 @@ public class ProfileService {
         userService.assignProfileToUser(user.getId(), profile.getId());
         fridgeInventory = fridgeInventoryRepository.save(fridgeInventory);
         return profile;
+    }
+
+    public List<Item> getItemsForProfile(Long profileId) {
+        Optional<Profile> profileOptional = profileRepository.findById(profileId);
+        if (profileOptional.isPresent()) {
+            Profile profile = profileOptional.get();
+            FridgeInventory fridgeInventory = profile.getFridgeInventory();
+            return fridgeInventory.getItems();
+        } else {
+            throw new RuntimeException("Profile not found with id: " + profileId);
+        }
     }
 
 //    private void createFridgeInventory(User user, Profile profile) {

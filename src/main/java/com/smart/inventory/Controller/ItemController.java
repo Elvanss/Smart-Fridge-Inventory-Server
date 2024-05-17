@@ -100,5 +100,14 @@ public class ItemController {
         return new Result(true, StatusCode.SUCCESS, "Fridge Inventory Updated");
     }
 
+    @GetMapping("/itemByProfile/{profileId}")
+    public Result getItemsByProfile(@PathVariable Long profileId) {
+        List <Item> items = profileService.getItemsForProfile(profileId);
+        List<ItemDTO> itemDTOS = items.stream()
+                .map(itemMapper::convertToItemDTO)
+                .collect(Collectors.toList());
+        return new Result(true, StatusCode.SUCCESS, "Items by Profile", itemDTOS);
+    }
+
 
 }

@@ -40,14 +40,6 @@ public class UserService {
     }
 
     // Sign Up
-//    public User save(User user) {
-//        user.setUsername(user.getUsername());
-//        user.setEmail(user.getEmail());
-//        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-//        user.setType(user.getType());
-//        return this.userRepository.save(user);
-//    }
-
     public User save(User user) {
         user = this.userRepository.save(user);
         user.setUsername(user.getUsername());
