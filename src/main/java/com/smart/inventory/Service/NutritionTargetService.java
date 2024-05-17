@@ -38,20 +38,14 @@ public class NutritionTargetService {
         Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new RuntimeException("Profile not found!"));
 
-        NutritionTarget nutritionTarget = nutritionTargetRepository.findByProfile(profile);
-
-        // Update the existing record if it exists, otherwise create a new one
-        if (nutritionTarget == null) {
-            nutritionTarget = new NutritionTarget();
-            nutritionTarget.setProfile(profile);
-        }
+        NutritionTarget nutritionTarget = new NutritionTarget();
+        nutritionTarget.setProfile(profile);
 
         nutritionTarget.setTargetCalories(targetCalories);
         nutritionTarget.setTargetProtein(targetProtein);
         nutritionTarget.setTargetFat(targetFat);
 
         profile.setNutritionTarget(targetCalories, targetProtein, targetFat);
-        nutritionTargetRepository.save(nutritionTarget);
         profileRepository.save(profile);
     }
 
