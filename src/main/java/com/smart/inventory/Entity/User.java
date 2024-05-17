@@ -40,7 +40,7 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Profile> profiles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ShoppingList> shoppingLists = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -69,14 +69,15 @@ public class User implements Serializable {
 
     // Add Shopping List
     public void addShoppingList(ShoppingList shoppingList) {
+        shoppingList.getUser().add(this);
         this.shoppingLists.add(shoppingList);
-        shoppingList.setUser(this);
+
     }
 
     // Remove Shopping List
     public void removeShoppingList(ShoppingList shoppingList) {
         this.shoppingLists.remove(shoppingList);
-        shoppingList.setUser(null);
+        shoppingList.getUser().remove(this);
     }
 
     // Get Number of Shopping Lists

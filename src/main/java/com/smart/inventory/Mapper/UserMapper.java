@@ -13,7 +13,8 @@ public class UserMapper {
                 source.getEmail(),
                 source.getPassword(),
                 source.getType(),
-                source.getNumberOfProfiles());
+                source.getNumberOfProfiles(),
+                source.getNumberOfShoppingLists());
     }
 
     public User convertToEntity(UserDTO source) {

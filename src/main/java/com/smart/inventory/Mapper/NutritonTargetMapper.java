@@ -14,7 +14,7 @@ public class NutritonTargetMapper {
         this.itemMapper = itemMapper;
     }
 
-    public ConsumptionRecordDTO toConsumptionRecordDTO(ConsumptionRecord consumptionRecord) {
+    public ConsumptionRecordDTO toNutritionTargetDto(ConsumptionRecord consumptionRecord) {
         ConsumptionRecordDTO consumptionRecordDTO = new ConsumptionRecordDTO();
         consumptionRecordDTO.setId(consumptionRecord.getId());
         consumptionRecordDTO.setProfile(consumptionRecord.getProfile() != null
@@ -27,7 +27,7 @@ public class NutritonTargetMapper {
         return consumptionRecordDTO;
     }
 
-    public ConsumptionRecord toConsumptionRecord(ConsumptionRecordDTO consumptionRecordDTO) {
+    public ConsumptionRecord toNutritionTarget(ConsumptionRecordDTO consumptionRecordDTO) {
         ConsumptionRecord consumptionRecord = new ConsumptionRecord();
         consumptionRecord.setProfile(consumptionRecordDTO.getProfile() != null
                 ? this.profileMapper.convertToEntity(consumptionRecordDTO.getProfile())

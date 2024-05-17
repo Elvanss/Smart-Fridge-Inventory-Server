@@ -112,6 +112,7 @@ public class Profile implements Serializable {
         }
         nutritionTarget.setTargetCalories(targetCalories);
         nutritionTarget.setTargetProtein(targetProtein);
+        nutritionTarget.setTargetFat(targetFat);
     }
 
     // Tracking the nutrition target for the profile (Requirement 6)
@@ -127,19 +128,19 @@ public class Profile implements Serializable {
             int consumedCalories = consumptionRecords.stream()
                     .mapToInt(cr -> cr.getItem().getCalories().intValue())
                     .sum();
-            progress.put("calories", (double) consumedCalories / targetCalories);
+            progress.put("calories", (double) consumedCalories *100 / targetCalories);
 
             // Calculate progress for protein
             int consumedProtein = consumptionRecords.stream()
                     .mapToInt(cr -> cr.getItem().getProtein().intValue())
                     .sum();
-            progress.put("protein", (double) consumedProtein / targetProtein);
+            progress.put("protein", (double) consumedProtein * 100 / targetProtein);
 
             // Calculate progress for fat
             int consumptedFat = consumptionRecords.stream()
                     .mapToInt(cr -> cr.getItem().getFat().intValue())
                     .sum();
-            progress.put("fat", (double) consumptedFat / nutritionTarget.getTargetFat());
+            progress.put("fat", (double) consumptedFat *100 / nutritionTarget.getTargetFat());
 
         }
         return progress;

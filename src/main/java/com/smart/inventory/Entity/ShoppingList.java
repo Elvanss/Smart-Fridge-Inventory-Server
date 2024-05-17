@@ -29,13 +29,23 @@ public class ShoppingList {
     @ElementCollection(fetch = FetchType.EAGER)
     @MapKeyColumn(name = "item")
     @Column(name = "quantity")
-    private Map<String, Integer> items = new HashMap<>();
+    private List<String> items = new ArrayList<>();
+
+    @Column(name = "cost")
+    private Double cost;
+
+    @Column(name = "estimated_date")
+    private Integer estimatedDate;
 
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    private List<User> user;
+
+    public Integer numberOfUser() {
+        return user.size();
+    }
 
 }

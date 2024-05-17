@@ -17,6 +17,7 @@ public class UserDTO {
     private String password;
     private RoleList roles;
     private int numberOfProfiles;
+    private int numberOfShoppingLists;
 
 }
 

@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -17,7 +19,9 @@ import java.util.Map;
 public class ShoppingListDTO {
     private Long id;
     private String name;
-    private Map<String, Integer> items = new HashMap<>();
+    private List<String> items = new ArrayList<>();
+    private Double cost;
+    private Integer estimatedDate;
     private String description;
-    private UserDTO user;
+    private Integer numberOfUser;
 }

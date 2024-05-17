@@ -17,26 +17,21 @@ import java.util.ArrayList;
 @Slf4j
 public class DBInitializer implements CommandLineRunner {
 
-    private final UserRepository userRepository;
-    private final ProfileRepository profileRepository;
-    private final FridgeInventoryRepository fridgeInventoryRepository;
+
     private final UserService userService;
-    private final ItemRepository itemRepository;
     private final MealRepository mealRepository;
     private final SharedFridgeRepository sharedFridgeInventory;
+    private final ShoppingListRepository shoppingListRepository;
 
-    public DBInitializer(UserRepository userRepository,
-                         ProfileRepository profileRepository,
-                         FridgeInventoryRepository fridgeInventoryRepository,
-                         UserService userService, ItemRepository itemRepository,
-                         MealRepository mealRepository, SharedFridgeRepository sharedFridgeInventory) {
-        this.userRepository = userRepository;
-        this.profileRepository = profileRepository;
-        this.fridgeInventoryRepository = fridgeInventoryRepository;
+
+    public DBInitializer(UserService userService,
+                         MealRepository mealRepository,
+                         SharedFridgeRepository sharedFridgeInventory,
+                         ShoppingListRepository shoppingListRepository) {
         this.userService = userService;
-        this.itemRepository = itemRepository;
         this.mealRepository = mealRepository;
         this.sharedFridgeInventory = sharedFridgeInventory;
+        this.shoppingListRepository = shoppingListRepository;
     }
 
 
@@ -97,7 +92,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item1 = new Item();
         item1.setName("Milk");
         item1.setCategory("Dairy");
-        item1.setStock(1);
+        item1.setStock(11);
         item1.setCalories(100.4);
         item1.setProtein(8.0);
         item1.setFat(2.0);
@@ -110,7 +105,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item2 = new Item();
         item2.setName("Bread");
         item2.setCategory("Bakery");
-        item2.setStock(2);
+        item2.setStock(5);
         item2.setCalories(250.0);
         item2.setProtein(25.2);
         item2.setFat(3.0);
@@ -149,7 +144,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item5 = new Item();
         item5.setName("Cheese");
         item5.setCategory("Dairy");
-        item5.setStock(1);
+        item5.setStock(11);
         item5.setCalories(402.0);
         item5.setProtein(25.0);
         item5.setFat(33.0);
@@ -162,7 +157,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item6 = new Item();
         item6.setName("Chicken");
         item6.setCategory("Meat");
-        item6.setStock(1);
+        item6.setStock(11);
         item6.setCalories(335.0);
         item6.setProtein(31.0);
         item6.setFat(20.0);
@@ -175,7 +170,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item7 = new Item();
         item7.setName("Beef");
         item7.setCategory("Meat");
-        item7.setStock(1);
+        item7.setStock(11);
         item7.setCalories(250.0);
         item7.setProtein(26.0);
         item7.setFat(17.0);
@@ -188,7 +183,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item8 = new Item();
         item8.setName("Pork");
         item8.setCategory("Meat");
-        item8.setStock(2);
+        item8.setStock(12);
         item8.setCalories(250.0);
         item8.setProtein(26.0);
         item8.setFat(17.0);
@@ -201,7 +196,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item9 = new Item();
         item9.setName("Orange Juice");
         item9.setCategory("Beverages");
-        item9.setStock(4);
+        item9.setStock(14);
         item9.setCalories(45.0);
         item9.setProtein(0.7);
         item9.setFat(0.2);
@@ -214,7 +209,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item10 = new Item();
         item10.setName("Yogurt");
         item10.setCategory("Dairy");
-        item10.setStock(6);
+        item10.setStock(16);
         item10.setCalories(59.0);
         item10.setProtein(10.0);
         item10.setFat(0.4);
@@ -227,7 +222,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item11 = new Item();
         item11.setName("Peanut Butter");
         item11.setCategory("Spreads");
-        item11.setStock(2);
+        item11.setStock(12);
         item11.setCalories(588.0);
         item11.setProtein(25.0);
         item11.setFat(50.0);
@@ -240,7 +235,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item12 = new Item();
         item12.setName("Salmon");
         item12.setCategory("Seafood");
-        item12.setStock(4);
+        item12.setStock(14);
         item12.setCalories(208.0);
         item12.setProtein(20.0);
         item12.setFat(13.0);
@@ -253,7 +248,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item13 = new Item();
         item13.setName("Spinach");
         item13.setCategory("Vegetables");
-        item13.setStock(3);
+        item13.setStock(30);
         item13.setCalories(23.0);
         item13.setProtein(2.9);
         item13.setFat(0.4);
@@ -292,7 +287,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item16 = new Item();
         item16.setName("Almond Milk");
         item16.setCategory("Beverages");
-        item16.setStock(2);
+        item16.setStock(7);
         item16.setCalories(30.0);
         item16.setProtein(1.0);
         item16.setFat(2.5);
@@ -305,7 +300,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item17 = new Item();
         item17.setName("Broccoli");
         item17.setCategory("Vegetables");
-        item17.setStock(3);
+        item17.setStock(30);
         item17.setCalories(55.0);
         item17.setProtein(3.7);
         item17.setFat(0.6);
@@ -318,7 +313,7 @@ public class DBInitializer implements CommandLineRunner {
         Item item18 = new Item();
         item18.setName("Strawberries");
         item18.setCategory("Fruits");
-        item18.setStock(5);
+        item18.setStock(35);
         item18.setCalories(32.0);
         item18.setProtein(0.7);
         item18.setFat(0.3);
@@ -836,8 +831,99 @@ public class DBInitializer implements CommandLineRunner {
         meal26.setDietaryLists(dietaryList26);
         meal26.setCookingMethod("1. Cook beef and mix with breadcrumbs, cheese, and garlic\n2. Stuff mushroom caps with beef mixture\n3. Bake until heated through");
 
+        ShoppingList shoppingList = new ShoppingList();
+        shoppingList.setName("Basic Shopping List");
+        ArrayList<String> items = new ArrayList<>();
+        items.add("Chicken");
+        items.add("Beef");
+        items.add("Pork");
+        items.add("Lettuce");
+        items.add("Tomato");
+        items.add("Cucumber");
+        items.add("Onion");
+        items.add("Olive oil");
+        items.add("Orange Juice");
+        items.add("Yogurt");
+        items.add("Peanut Butter");
+        items.add("Salmon");
+        items.add("Spinach");
+        items.add("Greek Yogurt");
+        items.add("Duck");
+        items.add("Almond Milk");
+        items.add("Broccoli");
+        shoppingList.setItems(items);
+        shoppingList.setCost(170.3);
+        shoppingList.setEstimatedDate(7);
+        shoppingList.setDescription("Basic shopping list for the week");
 
-        // Save to DB
+        // Shopping List 2
+        ShoppingList shoppingList2 = new ShoppingList();
+        shoppingList2.setName("Vegan Shopping List");
+        ArrayList<String> items2 = new ArrayList<>();
+        items2.add("Lentils");
+        items2.add("Quinoa");
+        items2.add("Kale");
+        items2.add("Avocado");
+        items2.add("Bananas");
+        items2.add("Chickpeas");
+        items2.add("Coconut Milk");
+        items2.add("Tofu");
+        items2.add("Cashews");
+        items2.add("Chia Seeds");
+        items2.add("Hummus");
+        items2.add("Mushrooms");
+        items2.add("Nutritional Yeast");
+        items2.add("Soy Sauce");
+        shoppingList2.setItems(items2);
+        shoppingList2.setCost(120.5);
+        shoppingList2.setEstimatedDate(7);
+        shoppingList2.setDescription("Vegan shopping list for the week");
+
+        // Shopping List 3
+        ShoppingList shoppingList3 = new ShoppingList();
+        shoppingList3.setName("Family Dinner Shopping List");
+        ArrayList<String> items3 = new ArrayList<>();
+        items3.add("Chicken");
+        items3.add("Pasta");
+        items3.add("Tomato Sauce");
+        items3.add("Garlic Bread");
+        items3.add("Salad Mix");
+        items3.add("Dressing");
+        items3.add("Ground Beef");
+        items3.add("Cheese");
+        items3.add("Bread");
+        items3.add("Milk");
+        items3.add("Eggs");
+        items3.add("Butter");
+        items3.add("Frozen Vegetables");
+        items3.add("Ice Cream");
+        shoppingList3.setItems(items3);
+        shoppingList3.setCost(90.75);
+        shoppingList3.setEstimatedDate(7);
+        shoppingList3.setDescription("Shopping list for family dinner this week");
+
+        // Shopping List 4
+        ShoppingList shoppingList4 = new ShoppingList();
+        shoppingList4.setName("Healthy Breakfast Shopping List");
+        ArrayList<String> items4 = new ArrayList<>();
+        items4.add("Oats");
+        items4.add("Eggs");
+        items4.add("Greek Yogurt");
+        items4.add("Berries");
+        items4.add("Bananas");
+        items4.add("Almond Butter");
+        items4.add("Whole Grain Bread");
+        items4.add("Spinach");
+        items4.add("Almond Milk");
+        items4.add("Chia Seeds");
+        items4.add("Flaxseed");
+        items4.add("Honey");
+        items4.add("Cottage Cheese");
+        items4.add("Oranges");
+        shoppingList4.setItems(items4);
+        shoppingList4.setCost(85.2);
+        shoppingList4.setEstimatedDate(7);
+        shoppingList4.setDescription("Shopping list for healthy breakfast options this week");
 
         /*
          * List of meals
@@ -870,6 +956,13 @@ public class DBInitializer implements CommandLineRunner {
         mealRepository.save(meal24);
         mealRepository.save(meal25);
         mealRepository.save(meal26);
+
+        shoppingListRepository.save(shoppingList);
+        shoppingListRepository.save(shoppingList2);
+        shoppingListRepository.save(shoppingList3);
+        shoppingListRepository.save(shoppingList4);
+
+
 
     }
 }

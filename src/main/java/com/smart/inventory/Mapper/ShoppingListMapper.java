@@ -10,11 +10,14 @@ public class ShoppingListMapper {
         ShoppingListDTO shoppingListDTO = new ShoppingListDTO();
         shoppingListDTO.setId(shoppingList.getId());
         shoppingListDTO.setName(shoppingList.getName());
+        shoppingListDTO.setItems(shoppingList.getItems() != null
+                ? shoppingList.getItems()
+                : null);
+        shoppingListDTO.setCost(shoppingList.getCost());
+        shoppingListDTO.setEstimatedDate(shoppingList.getEstimatedDate());
         shoppingListDTO.setDescription(shoppingList.getDescription());
-        shoppingListDTO.setUser(shoppingList.getUser() == null
-                                                    ? new UserMapper().convertToDto(shoppingList.getUser())
-                                                    : null);
-        shoppingListDTO.setItems(shoppingList.getItems());
+        shoppingListDTO.setNumberOfUser(shoppingList.numberOfUser());
+
         return shoppingListDTO;
     }
 
@@ -22,6 +25,9 @@ public class ShoppingListMapper {
         ShoppingList shoppingList = new ShoppingList();
         shoppingList.setId(shoppingListDTO.getId());
         shoppingList.setName(shoppingListDTO.getName());
+        shoppingList.setItems(shoppingListDTO.getItems());
+        shoppingList.setCost(shoppingListDTO.getCost());
+        shoppingList.setEstimatedDate(shoppingListDTO.getEstimatedDate());
         shoppingList.setDescription(shoppingListDTO.getDescription());
         return shoppingList;
     }

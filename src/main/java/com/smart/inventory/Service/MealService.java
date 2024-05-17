@@ -6,6 +6,7 @@ import com.smart.inventory.Repository.MealRepository;
 import com.smart.inventory.Repository.ProfileRepository;
 import com.smart.inventory.System.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,8 +95,14 @@ public class MealService {
     public List<Meal> getMealSuggestion(List<String> items, int days, int maxMealsPerDay) {
         List<Meal> allMeals = this.mealRepository.findAll();
 
+        List<String> lowerCaseItems = items.stream()
+                .map(String::toLowerCase)
+                .toList();
+
         List<Meal> suitableMeals = allMeals.stream()
-            .filter(meal -> meal.getIngredients().stream().anyMatch(items::contains))
+            .filter(meal -> meal.getIngredients().stream()
+                    .map(String::toLowerCase)
+                    .anyMatch(lowerCaseItems::contains))
             .collect(Collectors.toList());
 
         if (suitableMeals.isEmpty()) {
@@ -137,6 +144,7 @@ public class MealService {
         return profile.getMealSaved();
     }
 
+    @Transactional
     public void deleteMealfromProfileFavorite(Long mealId, Long profileId) {
         Meal meal = this.mealRepository.findById(mealId)
                 .orElseThrow(() -> new ObjectNotFoundException("meal not found!", mealId));
@@ -144,10 +152,7 @@ public class MealService {
         Profile profile = this.profileRepository.findById(profileId)
                 .orElseThrow(() -> new ObjectNotFoundException("profile not found!", profileId));
 
-        profile.removeMealSaved(meal);
-        meal.getProfiles().remove(profile); // Remove the profile from the meal's profiles list
-        profileRepository.save(profile);
-        mealRepository.save(meal);
+        profile.removeMealSaved(meal); // remove meal from profile
         profileRepository.save(profile);
     }
 }
