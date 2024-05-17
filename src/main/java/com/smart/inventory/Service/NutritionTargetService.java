@@ -40,12 +40,12 @@ public class NutritionTargetService {
 
         NutritionTarget nutritionTarget = nutritionTargetRepository.findByProfile(profile);
 
-        // Created the new object while it doesn't create yet
+        // Update the existing record if it exists, otherwise create a new one
         if (nutritionTarget == null) {
             nutritionTarget = new NutritionTarget();
+            nutritionTarget.setProfile(profile);
         }
 
-        nutritionTarget.setProfile(profile);
         nutritionTarget.setTargetCalories(targetCalories);
         nutritionTarget.setTargetProtein(targetProtein);
         nutritionTarget.setTargetFat(targetFat);
@@ -53,7 +53,6 @@ public class NutritionTargetService {
         profile.setNutritionTarget(targetCalories, targetProtein, targetFat);
         nutritionTargetRepository.save(nutritionTarget);
         profileRepository.save(profile);
-
     }
 
     // Reset the nutrition target
