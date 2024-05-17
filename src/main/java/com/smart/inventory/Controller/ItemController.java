@@ -59,13 +59,13 @@ public class ItemController {
 
     @DeleteMapping("/delete/{id}")
     public Result deleteItem(@PathVariable Long id) {
-        itemService.deleteItem(id);
+        this.itemService.deleteItem(id);
         return new Result(true, StatusCode.SUCCESS, "Item Deleted");
     }
 
     // Requirement 2: Search item by name
     @GetMapping("/search")
-    public Result searchItemLeastByCharacter(@RequestParam String name) {
+    public Result searchItemLeastByCharacter(@RequestParam("item") String name) {
         List<Item> items = itemService.searchItemLeastByCharacter(name);
         List<ItemDTO> itemDTOS = items.stream()
                 .map(itemMapper::convertToItemDTO)
@@ -81,14 +81,6 @@ public class ItemController {
                 .map(itemMapper::convertToItemDTO)
                 .collect(Collectors.toList());
         return new Result(true, StatusCode.SUCCESS, "Fridge Inventory", itemDTOS);
-    }
-
-    // Requirement 2: Update item stock
-    @PutMapping("/updateStock/{itemId}")
-    public Result updateItemStock(@PathVariable Long itemId, @RequestParam Integer ItemTookNumber) {
-        Item item = new Item(); // You need to get the item based on the itemId
-        itemService.updateItemStock(item, ItemTookNumber);
-        return new Result(true, StatusCode.SUCCESS, "Item Stock Updated");
     }
 
     // Requirement 2: Remove item from fridge

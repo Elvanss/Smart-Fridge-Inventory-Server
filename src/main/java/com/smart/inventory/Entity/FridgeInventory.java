@@ -42,9 +42,9 @@ public class FridgeInventory {
         this.items.add(item);
     }
 
-    public void removeItem(Item itemToBeRemoved) {
-        itemToBeRemoved.setFridgeInventory(null);
-        this.items.remove(itemToBeRemoved);
+    public void removeItem(Item item) {
+        items.remove(item);
+        item.setFridgeInventory(null);
     }
 
     public void removeItems() {

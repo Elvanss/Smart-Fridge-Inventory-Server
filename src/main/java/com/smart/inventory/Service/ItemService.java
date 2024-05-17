@@ -33,21 +33,20 @@ public class ItemService {
 
     // Update an item in the fridge
     public Item updateItem (Long id, Item item) {
-        item = itemRepository.findById(id)
+        Item itemSaved = itemRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Item Not Found! "));
-        item.setName(item.getName());
-        item.setCategory(item.getCategory());
-        item.setStock(item.getStock());
-        item.setCalories(item.getCalories());
-        item.setProtein(item.getProtein());
-        item.setFat(item.getFat());
-        item.setStockStatus(item.getStockStatus());
-        item.setPurchaseDate(item.getPurchaseDate());
-        item.setExpiryDate(item.getExpiryDate());
+        itemSaved.setName(item.getName());
+        itemSaved.setCategory(item.getCategory());
+        itemSaved.setStock(item.getStock());
+        itemSaved.setCalories(item.getCalories());
+        itemSaved.setProtein(item.getProtein());
+        itemSaved.setFat(item.getFat());
+        itemSaved.setStockStatus(item.getStockStatus());
+        itemSaved.setPurchaseDate(item.getPurchaseDate());
+        itemSaved.setExpiryDate(item.getExpiryDate());
 //        itemValid.setDaysLeft(itemValid.getExpiryDate().toEpochDay() - itemValid.getPurchaseDate().toEpochDay());
-        item.setDescription(item.getDescription());
-
-        return item;
+        itemSaved.setDescription(item.getDescription());
+        return itemRepository.save(itemSaved);
     }
 
     public Item addItemToFridge(Profile profile, Item item) {
@@ -78,12 +77,7 @@ public class ItemService {
 //                .toList();
 //    }
 
-    // Delete an item from the fridge
-    public void deleteItem(Long id) {
-        Item itemValid = itemRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Item Not Found! "));
-        itemRepository.delete(itemValid);
-    }
+
 
     public List<Item> searchItemLeastByCharacter(String name) {
         return this.itemRepository.findByNameContaining(name);
@@ -93,13 +87,18 @@ public class ItemService {
         return user.getSharedFridge().getFridgeInventories().get(0).getItems();
     }
 
-    public void updateItemStock(Item item, Integer newStock) {
-        item.setStock(newStock);
-    }
-
+    @Transactional
     public void removeItemFromFridge(Item item) {
         FridgeInventory fridgeInventory = item.getFridgeInventory();
         fridgeInventory.removeItem(item);
+    }
+
+    // Delete an item from the fridge
+    @Transactional
+    public void deleteItem(Long id) {
+        this.itemRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Item Not Found! "));
+        this.itemRepository.deleteById(id);
     }
 
     public void updateFridgeInventoryFromSmartFridge(User user, List<Item> updatedItems) {
