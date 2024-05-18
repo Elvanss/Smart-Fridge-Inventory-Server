@@ -35,29 +35,54 @@ public class ConsumptionRecordService {
     }
 
     // Requirement 4: Transfer item to consumption record
-    public void transferItemToComsumptionRecord(Long profileId, Long itemId, Integer quantity) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new RuntimeException("Profile not found"));
+//    public void transferItemToComsumptionRecord(Long profileId, Long itemId, Integer quantity) {
+//        Profile profile = profileRepository.findById(profileId)
+//                .orElseThrow(() -> new RuntimeException("Profile not found"));
+//
+//        FridgeInventory fridgeInventory = profile.getFridgeInventory();
+//        if (fridgeInventory == null) {
+//            throw new RuntimeException("FridgeInventory not found");
+//        }
+//
+//        Item item = fridgeInventory.getItems().stream() // get all items in the fridge
+//                .filter(i -> i.getId().equals(itemId))// filter the item by id
+//                .findFirst() // get the first item
+//                .orElseThrow(() -> new RuntimeException("Item not found"));
+//
+//        ConsumptionRecord consumptionRecord = new ConsumptionRecord();
+//        consumptionRecord.setItem(item);
+//        consumptionRecord.setQuantity(quantity);
+//        consumptionRecord.setConsumedAt(LocalDateTime.now());
+//        consumptionRecord.setProfile(profile);
+//        profile.transferItemToConsumptionRecord(item, quantity);
+//        itemRepository.save(item);
+//        this.consumptionRecordRepository.save(consumptionRecord);
+//    }
 
-        FridgeInventory fridgeInventory = profile.getFridgeInventory();
-        if (fridgeInventory == null) {
-            throw new RuntimeException("FridgeInventory not found");
-        }
+public void transferItemToComsumptionRecord(Long profileId, Long itemId, Integer quantity) {
+    Profile profile = profileRepository.findById(profileId)
+            .orElseThrow(() -> new RuntimeException("Profile not found"));
 
-        Item item = fridgeInventory.getItems().stream() // get all items in the fridge
-                .filter(i -> i.getId().equals(itemId))// filter the item by id
-                .findFirst() // get the first item
-                .orElseThrow(() -> new RuntimeException("Item not found"));
+    Item item = itemRepository.findById(itemId)
+            .orElseThrow(() -> new RuntimeException("Item not found"));
 
-        ConsumptionRecord consumptionRecord = new ConsumptionRecord();
-        consumptionRecord.setItem(item);
-        consumptionRecord.setQuantity(quantity);
-        consumptionRecord.setConsumedAt(LocalDateTime.now());
-        consumptionRecord.setProfile(profile);
-        profile.transferItemToConsumptionRecord(item, quantity);
-        itemRepository.save(item);
-        this.consumptionRecordRepository.save(consumptionRecord);
+    if (item.getStock() < quantity) {
+        throw new RuntimeException("Insufficient stock for the item");
     }
+
+    // Subtract the quantity from the item's stock
+    item.setStock(item.getStock() - quantity);
+
+    ConsumptionRecord consumptionRecord = new ConsumptionRecord();
+    consumptionRecord.setItem(item);
+    consumptionRecord.setQuantity(quantity);
+    consumptionRecord.setConsumedAt(LocalDateTime.now());
+    consumptionRecord.setProfile(profile);
+
+    // Save the updated item and the new consumption record
+    itemRepository.save(item);
+    consumptionRecordRepository.save(consumptionRecord);
+}
 
     // Requirement 2: Get all consumption records by user
     public List<ConsumptionRecord> getAllConsumptionRecordsByUser(User user) {
