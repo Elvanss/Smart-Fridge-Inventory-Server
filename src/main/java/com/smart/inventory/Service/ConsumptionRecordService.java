@@ -70,18 +70,19 @@ public void transferItemToComsumptionRecord(Long profileId, Long itemId, Integer
         throw new RuntimeException("Insufficient stock for the item");
     }
 
-    // Subtract the quantity from the item's stock
-    item.setStock(item.getStock() - quantity);
-
-    ConsumptionRecord consumptionRecord = new ConsumptionRecord();
-    consumptionRecord.setItem(item);
-    consumptionRecord.setQuantity(quantity);
-    consumptionRecord.setConsumedAt(LocalDateTime.now());
-    consumptionRecord.setProfile(profile);
+//    // Subtract the quantity from the item's stock
+//    item.setStock(item.getStock() - quantity);
+//
+//    ConsumptionRecord consumptionRecord = new ConsumptionRecord();
+//    consumptionRecord.setItem(item);
+//    consumptionRecord.setQuantity(quantity);
+//    consumptionRecord.setConsumedAt(LocalDateTime.now());
+//    consumptionRecord.setProfile(profile);
+    profile.transferItemToConsumptionRecord(item, quantity);
 
     // Save the updated item and the new consumption record
     itemRepository.save(item);
-    consumptionRecordRepository.save(consumptionRecord);
+//    consumptionRecordRepository.save(consumptionRecord);
 }
 
     // Requirement 2: Get all consumption records by user
