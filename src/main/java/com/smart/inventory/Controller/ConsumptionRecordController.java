@@ -28,7 +28,7 @@ public class ConsumptionRecordController {
         this.userService = userService;
     }
 
-    // Sequence Diagram 1
+    // Sequence Diagram: Get all consumption records
     // Requirement 4: Get all consumption records by profile
     @GetMapping
     public Result getAllConsumptionRecordsByProfile(@RequestParam("profile") Long profileId) {
@@ -52,10 +52,9 @@ public Result getAllConsumptionRecordsByUser(@RequestParam("user") Long userId) 
 
     @PostMapping("/transfer")
     public Result transferItemToComsumptionRecord(@RequestParam("profileId") Long ProfileId,
-                                                  @RequestParam("toProfile") Long toProfile,
                                                   @RequestParam("itemId") Long itemId,
                                                   @RequestParam("quantity") Integer quantity) {
-        this.consumptionRecordService.transferItemToComsumptionRecord(ProfileId, toProfile, itemId, quantity);
+        this.consumptionRecordService.transferItemToComsumptionRecord(ProfileId, itemId, quantity);
         return new Result(true, StatusCode.SUCCESS, "Item transferred");
     }
 }
