@@ -35,16 +35,19 @@ public class ConsumptionRecordService {
     }
 
     // Requirement 4: Transfer item to consumption record
-    public void transferItemToComsumptionRecord(Long profileId, Long itemId, Integer quantity) {
-        Profile profile = profileRepository.findById(profileId)
+    public void transferItemToComsumptionRecord(Long fromProfileId, Long toProfileId, Long itemId, Integer quantity) {
+        Profile fromProfile = profileRepository.findById(fromProfileId)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
 
-        FridgeInventory fridgeInventory = profile.getFridgeInventory();
-        if (fridgeInventory == null) {
+        Profile toProfile = profileRepository.findById(toProfileId)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+        FridgeInventory fromFridgeInventory = fromProfile.getFridgeInventory();
+        if (fromFridgeInventory == null) {
             throw new RuntimeException("FridgeInventory not found");
         }
 
-        Item item = fridgeInventory.getItems().stream() // get all items in the fridge
+        Item item = fromFridgeInventory.getItems().stream() // get all items in the fridge
                 .filter(i -> i.getId().equals(itemId))// filter the item by id
                 .findFirst() // get the first item
                 .orElseThrow(() -> new RuntimeException("Item not found"));
@@ -53,8 +56,8 @@ public class ConsumptionRecordService {
         consumptionRecord.setItem(item);
         consumptionRecord.setQuantity(quantity);
         consumptionRecord.setConsumedAt(LocalDateTime.now());
-        consumptionRecord.setProfile(profile);
-        profile.transferItemToConsumptionRecord(item, quantity);
+        consumptionRecord.setProfile(toProfile);
+        toProfile.transferItemToConsumptionRecord(item, quantity);
         itemRepository.save(item);
         this.consumptionRecordRepository.save(consumptionRecord);
     }

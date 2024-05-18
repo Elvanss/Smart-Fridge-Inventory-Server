@@ -52,9 +52,10 @@ public Result getAllConsumptionRecordsByUser(@RequestParam("user") Long userId) 
 
     @PostMapping("/transfer")
     public Result transferItemToComsumptionRecord(@RequestParam("profileId") Long ProfileId,
+                                                  @RequestParam("toProfile") Long toProfile,
                                                   @RequestParam("itemId") Long itemId,
                                                   @RequestParam("quantity") Integer quantity) {
-        this.consumptionRecordService.transferItemToComsumptionRecord(ProfileId, itemId, quantity);
+        this.consumptionRecordService.transferItemToComsumptionRecord(ProfileId, toProfile, itemId, quantity);
         return new Result(true, StatusCode.SUCCESS, "Item transferred");
     }
 }
