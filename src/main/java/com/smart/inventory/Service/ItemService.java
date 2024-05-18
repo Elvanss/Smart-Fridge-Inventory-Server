@@ -73,6 +73,7 @@ public class ItemService {
 //    }
 
     public Item addItemToFridge(Profile profile, Item item) {
+
         // Step 1: Create Item
         Item newItem = new Item();
         newItem.setName(item.getName());
@@ -103,6 +104,7 @@ public class ItemService {
 
         // Step 3: Associate the Item with the FridgeInventory
         newItem.setFridgeInventory(fridgeInventory);
+
         // Step 4: Save the Item
         return itemRepository.save(newItem);
     }

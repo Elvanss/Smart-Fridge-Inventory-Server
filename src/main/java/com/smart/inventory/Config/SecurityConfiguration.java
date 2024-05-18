@@ -134,6 +134,16 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/meals/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/meals/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/shopping-lists/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/shopping-lists/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/shopping-lists/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/shopping-lists/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+
+                                .requestMatchers(HttpMethod.GET, this.baseUrl + "/reports/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/reports/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.PUT, this.baseUrl + "/reports/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/reports/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+
                                 //Allow swaggerUI with path "http://localhost:8080/swagger-ui/index.html"
                                 .requestMatchers("/swagger-ui/**","/v3/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()
