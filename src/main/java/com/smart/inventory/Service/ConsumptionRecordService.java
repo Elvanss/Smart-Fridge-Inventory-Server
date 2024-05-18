@@ -80,6 +80,7 @@ public void transferItemToComsumptionRecord(Long profileId, Long itemId, Integer
     consumptionRecord.setProfile(profile);
 //    profile.transferItemToConsumptionRecord(item, quantity);
 
+
     // Save the updated item and the new consumption record
     itemRepository.save(item);
     consumptionRecordRepository.save(consumptionRecord);
