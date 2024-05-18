@@ -23,6 +23,7 @@ public class ReportController {
         this.reportService = reportService;
     }
 
+    // Sequence Diagram 23
     // Requirement 1: Generate report for a profile
     @GetMapping("/{profileId}")
     public Result generateReport(@PathVariable Long profileId) {
@@ -30,6 +31,7 @@ public class ReportController {
         return new Result(true, StatusCode.SUCCESS, "Report generated", profileDTO);
     }
 
+    // Sequence Diagram 24
     // Requirement 3: Generate report for all profiles
     @GetMapping("/all/{userId}")
     public Result generateReportForAllProfiles(@PathVariable Long userId) {

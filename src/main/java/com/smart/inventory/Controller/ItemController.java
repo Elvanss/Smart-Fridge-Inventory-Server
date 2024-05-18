@@ -36,6 +36,7 @@ public class ItemController {
         return new Result(true, StatusCode.SUCCESS, "All Items", itemDTOS);
     }
 
+    // Sequence Diagram 6
     @PutMapping("/update/{id}")
     public Result updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
         Item item = itemMapper.convertToItem(itemDTO);
@@ -44,6 +45,7 @@ public class ItemController {
         return new Result(true, StatusCode.SUCCESS, "Item Updated", updatedItemDTO);
     }
 
+    // Sequence Diagram 7
     // Requirement 2: Add item to fridge
     @PostMapping("/{profileId}/add")
     public Result addItemToFridgeInventory(@PathVariable Long profileId, @RequestBody Item item) {
@@ -57,12 +59,14 @@ public class ItemController {
         return new Result(true, StatusCode.SUCCESS, "Item Added to Fridge", itemDTO);
     }
 
+    // Sequence Diagram 8
     @DeleteMapping("/delete/{id}")
     public Result deleteItem(@PathVariable Long id) {
         this.itemService.deleteItem(id);
         return new Result(true, StatusCode.SUCCESS, "Item Deleted");
     }
 
+    // Sequence Diagram 9
     // Requirement 2: Search item by name
     @GetMapping("/search")
     public Result searchItemLeastByCharacter(@RequestParam("item") String name) {
@@ -100,6 +104,7 @@ public class ItemController {
         return new Result(true, StatusCode.SUCCESS, "Fridge Inventory Updated");
     }
 
+    // Sequence Diagram 10
     @GetMapping("/itemByProfile/{profileId}")
     public Result getItemsByProfile(@PathVariable Long profileId) {
         List <Item> items = profileService.getItemsForProfile(profileId);

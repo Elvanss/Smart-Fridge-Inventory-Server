@@ -25,6 +25,7 @@ public class ShoppingListController {
         this.shoppingListMapper = shoppingListMapper;
     }
 
+    // Sequence Diagram 17
     @GetMapping
     public Result getShoppingLists() {
         List<ShoppingList> shoppingLists = this.shoppingListService.findAll();
@@ -34,6 +35,7 @@ public class ShoppingListController {
         return new Result(true, StatusCode.SUCCESS, "All Shopping Lists", shoppingListDto);
     }
 
+    // Sequence Diagram 18
     @GetMapping("/generate")
     public Result generateShoppingList(@RequestParam("items") List<String> items,
                                        @RequestParam("days") int expectedDays) {
@@ -45,6 +47,7 @@ public class ShoppingListController {
         return new Result(true, StatusCode.SUCCESS, "Suitable Shopping Lists", shoppingListDTOS);
     }
 
+    // Sequence Diagram 19
     @PostMapping("/assign")
     public Result AddShoppingListToFavorite(@RequestParam("userId") Long userId,
                                             @RequestParam("shoppingListId") Long shoppingListId) {

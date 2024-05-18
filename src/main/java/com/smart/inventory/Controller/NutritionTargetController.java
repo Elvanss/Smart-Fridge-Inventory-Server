@@ -17,6 +17,7 @@ public class NutritionTargetController {
         this.nutritionTargetService = nutritionTargetService;
     }
 
+    // Sequence Diagram 20
     @PostMapping("/set/{profileId}")
     public Result setNutritionTarget(@PathVariable Long profileId,
                                      @RequestParam("calo") Integer targetCalories,
@@ -26,12 +27,14 @@ public class NutritionTargetController {
         return new Result(true, StatusCode.SUCCESS, "Nutrition target set successfully", null);
     }
 
+    // Sequence Diagram 21
     @PostMapping("/reset/{profileId}")
     public Result resetNutritionTarget(@PathVariable Long profileId) {
         nutritionTargetService.resetNutritionTarget(profileId);
         return new Result(true, StatusCode.SUCCESS, "Nutrition target reset successfully", null);
     }
 
+    // Sequence Diagram 22
     @GetMapping("/progress/{profileId}")
     public Result getProgressAgainstTargets(@PathVariable long profileId) {
         Map<String, Double> progress = nutritionTargetService.getProgressAgainstTargets(profileId);

@@ -124,21 +124,25 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/shared-fridge/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/shared-fridge/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
+                                // Consumption Record Permissions
                                 .requestMatchers(HttpMethod.GET, this.baseUrl + "/consumption-records/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/consumption-records/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/consumption-records/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/consumption-records/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
+                                // Meal Permissions
                                 .requestMatchers(HttpMethod.GET, this.baseUrl + "/meals/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/meals/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/meals/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/meals/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
+                                // Shopping List Permissions
                                 .requestMatchers(HttpMethod.GET, this.baseUrl + "/shopping-lists/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/shopping-lists/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/shopping-lists/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.DELETE, this.baseUrl + "/shopping-lists/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
 
+                                // Report Permissions
                                 .requestMatchers(HttpMethod.GET, this.baseUrl + "/reports/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/reports/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
                                 .requestMatchers(HttpMethod.PUT, this.baseUrl + "/reports/**").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())

@@ -25,6 +25,7 @@ public class ProfileController {
         this.profileMapper = profileMapper;
     }
 
+    // Sequence Diagram 4
     // Requirement 1: Get all profiles for a user.
     @GetMapping("/users/{userId}")
     public Result findAllProfiles(@PathVariable Long userId) {
@@ -54,6 +55,7 @@ public class ProfileController {
         return new Result(true, StatusCode.SUCCESS, "Find One Success", profileDto);
     }
 
+    // Sequence Diagram 3
     // Requirement 1: Add a profile for a user.
     @PostMapping("/add")
     public Result addProfile(@RequestParam("userId") Long userId, @RequestBody ProfileDTO profileDTO) {
@@ -63,6 +65,7 @@ public class ProfileController {
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedProfileDto);
     }
 
+    // Sequence Diagram 11
     // Requirement 1: Update a profile.
     @PutMapping("/{profileId}")
     public Result updateProfile(@PathVariable Long profileId, @RequestBody ProfileDTO profileDto) {
@@ -72,6 +75,7 @@ public class ProfileController {
         return new Result(true, StatusCode.SUCCESS, "Update Success", updatedProfileDto);
     }
 
+    // Sequence Diagram 5
     // Requirement 1:  Delete a profile.
     @DeleteMapping("/delete/{profileId}")
     public Result deleteProfile(@PathVariable Long profileId) {

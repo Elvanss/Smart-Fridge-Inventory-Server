@@ -22,6 +22,7 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
+
     // Admin Side: Get all users.
     @GetMapping
     public Result getUsers() {
@@ -39,6 +40,7 @@ public class UserController {
         return new Result(true, StatusCode.SUCCESS, "User Found", userDTO);
     }
 
+    // Sequence Diagram 2
     // Register a new user.
     @PostMapping("/register")
     public Result registerUser(@RequestBody UserDTO userDTO) {

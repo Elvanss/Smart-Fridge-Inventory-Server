@@ -33,6 +33,7 @@ public class MealController {
         this.profileService = profileService;
     }
 
+    // Sequence Diagram 12
     // Requirement 3: Get all meals
     @GetMapping
     public Result getMeals() {
@@ -52,6 +53,7 @@ public class MealController {
         return new Result(true, StatusCode.SUCCESS, "Meal Found", mealDTO);
     }
 
+    // Sequence Diagram 13
     // Requirement 3: Search meal by name
     @GetMapping("/search")
     public Result searchMeal(@RequestParam("name") String name) {
@@ -90,6 +92,7 @@ public class MealController {
         return new Result(true, StatusCode.SUCCESS, "Meal Deleted");
     }
 
+    // Sequence Diagram 14
     // Requirement 3: Get meal suggestion
     @GetMapping("/suggestion")
     public Result getMealSuggestion(@RequestParam List<String> items,
@@ -103,6 +106,7 @@ public class MealController {
         return new Result(true, StatusCode.SUCCESS, "Suggested Meals", mealDTOS);
     }
 
+    // Sequence Diagram 15
     // Requirement 3: Add meal to favorite
     @PostMapping("/add-to-favorite")
     public Result addMealToFavorite(@RequestParam("mealId") Long mealId,
@@ -111,6 +115,7 @@ public class MealController {
        return new Result(true, StatusCode.SUCCESS, "Meal Added to Favorite");
     }
 
+    // Sequence Diagram 16
     @GetMapping("/favorite")
     public Result getFavoriteMeals(@RequestParam("userId") Long userId, @RequestParam("profileId") Long profileId) {
         Profile profile = profileService.getProfileByUserId(userId, profileId);

@@ -1,27 +1,128 @@
 @startuml
-'https://plantuml.com/class-diagram
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
-
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-Object[] elementData
-size()
+class ConsumptionRecord {
+    - id : Long
+    - profile : Profile
+    - item : Item
+    - quantity : Integer
+    - consumedAt : LocalDateTime
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+class FridgeInventory {
+    - id : Long
+    - sharedFridge : SharedFridge
+    - profile : Profile
+    - items : List<Item>
+    + addItem(Item) : void
+    + removeItem(Item) : void
+    + removeItems() : void
+    + getNumberOfItems() : Integer
 }
+
+class Item {
+    - id : Long
+    - name : String
+    - category : String
+    - stock : Integer
+    - calories : Double
+    - protein : Double
+    - fat : Double
+    - stockStatus : StockStatus
+    - purchaseDate : LocalDate
+    - expiryDate : LocalDate
+    - daysLeft : Long
+    - description : String
+    - fridgeInventory : FridgeInventory
+    - consumptionRecords : List<ConsumptionRecord>
+    + addConsumptionRecord(ConsumptionRecord) : void
+    + removeConsumptionRecord(ConsumptionRecord) : void
+    + removeAllConsumptionRecords() : void
+    + getNumberOfConsumptionRecords() : Integer
+}
+
+class Meal {
+    - id : Long
+    - name : String
+    - mealImageUrl : String
+    - cookingTime : String
+    - ingredients : List<String>
+    - dietaryLists : List<DietaryList>
+    - cookingMethod : String
+    - profiles : List<Profile>
+}
+
+class NutritionTarget {
+    - id : Long
+    - profile : Profile
+    - targetCalories : Integer
+    - targetProtein : Integer
+    - targetFat : Integer
+}
+
+class Profile {
+    - id : Long
+    - name : String
+    - age : Integer
+    - dietary : DietaryList
+    - Allergies : String
+    - description : String
+    - user : User
+    - fridgeInventory : FridgeInventory
+    - mealSaved : List<Meal>
+    - consumptionRecords : List<ConsumptionRecord>
+    - nutritionTarget : NutritionTarget
+    + addMealSaved(Meal) : void
+    + removeMealSaved(Meal) : void
+    + removeAllMealSaved() : void
+    + numberOfSavedMeal() : Integer
+    + addItemToFridgeInventory(Item) : void
+    + transferItemToConsumptionRecord(Item, Integer) : void
+    + setNutritionTarget(Integer, Integer, Integer) : void
+    + getProgressAgainstTargets() : Map<String, Double>
+}
+
+class SharedFridge {
+    - id : Long
+    - user : User
+    - fridgeInventories : List<FridgeInventory>
+    + addFridgeInventory(FridgeInventory) : void
+    + removeFridgeInventory(FridgeInventory) : void
+    + getNumberOfFridgeInventories() : int
+}
+
+class ShoppingList {
+    - id : Long
+    - name : String
+    - items : Map<String, Integer>
+    - cost : Double
+    - estimatedDate : Integer
+    - description : String
+    - user : List<User>
+    + numberOfUser() : Integer
+}
+
+class User {
+    - id : long
+    - username : String
+    - email : String
+    - password : String
+    - type : RoleList
+    - profiles : List<Profile>
+    - shoppingLists : List<ShoppingList>
+    - sharedFridge : SharedFridge
+    + getAllFridgeInventoriesInSharedFridge() : List<FridgeInventory>
+    + addProfile(Profile) : void
+    + removeProfile(Profile) : void
+    + getNumberOfProfiles() : int
+    + addShoppingList(ShoppingList) : void
+    + removeShoppingList(ShoppingList) : void
+    + getNumberOfShoppingLists() : int
+}
+
+FridgeInventory "1" *-- "1" SharedFridge
+FridgeInventory "1" *-- "1" Profile
+FridgeInventory "1" o-- "*" Item
+
+
 
 @enduml

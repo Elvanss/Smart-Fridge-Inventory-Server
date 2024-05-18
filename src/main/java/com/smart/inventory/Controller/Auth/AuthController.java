@@ -25,6 +25,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    // Sequence Diagram 1
     @PostMapping("/login")
     public Result getLoginInfo(Authentication authentication) {
         LOGGER.debug("Authenticated user: '{}'", authentication.getName());

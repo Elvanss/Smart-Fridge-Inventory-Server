@@ -32,5 +32,4 @@ public class ConsumptionRecord {
     @Column(name = "consumed_at")
     private LocalDateTime consumedAt;
 
-    // Constructors, getters, and setters
 }

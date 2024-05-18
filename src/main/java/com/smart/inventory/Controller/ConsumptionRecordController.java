@@ -28,6 +28,7 @@ public class ConsumptionRecordController {
         this.userService = userService;
     }
 
+    // Sequence Diagram 1
     // Requirement 4: Get all consumption records by profile
     @GetMapping
     public Result getAllConsumptionRecordsByProfile(@RequestParam("profile") Long profileId) {
