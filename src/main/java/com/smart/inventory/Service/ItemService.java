@@ -49,24 +49,62 @@ public class ItemService {
         return itemRepository.save(itemSaved);
     }
 
+//    public Item addItemToFridge(Profile profile, Item item) {
+//        // Step 1: Create Item
+//         Item newItem = new Item();
+//         newItem.setName(item.getName());
+//         newItem.setCategory(item.getCategory());
+//         newItem.setStock(item.getStock());
+//         newItem.setCalories(item.getCalories());
+//         newItem.setProtein(item.getProtein());
+//         newItem.setFat(item.getFat());
+//         newItem.setStockStatus(item.getStockStatus());
+//         newItem.setPurchaseDate(item.getPurchaseDate());
+//         newItem.setExpiryDate(item.getExpiryDate());
+//         newItem.setDaysLeft(item.getExpiryDate().toEpochDay() - item.getPurchaseDate().toEpochDay());
+//         newItem.setDescription(item.getDescription());
+//         // Step 2: Save Item
+//         Item savedItem = itemRepository.save(newItem);
+//         // Step 3: Add Item to Fridge Inventory
+//         profile.setFridgeInventory(item.getFridgeInventory());
+//         // Step 4: Add Item to Profile
+//         profile.addItemToFridgeInventory(savedItem);
+//         return itemRepository.save(savedItem);
+//    }
+
     public Item addItemToFridge(Profile profile, Item item) {
-         Item newItem = new Item();
-         newItem.setName(item.getName());
-         newItem.setCategory(item.getCategory());
-         newItem.setStock(item.getStock());
-         newItem.setCalories(item.getCalories());
-         newItem.setProtein(item.getProtein());
-         newItem.setFat(item.getFat());
-         newItem.setStockStatus(item.getStockStatus());
-         newItem.setPurchaseDate(item.getPurchaseDate());
-         newItem.setExpiryDate(item.getExpiryDate());
-         newItem.setDaysLeft(item.getExpiryDate().toEpochDay() - item.getPurchaseDate().toEpochDay());
-         newItem.setDescription(item.getDescription());
-         newItem.setFridgeInventory(profile.getFridgeInventory());
-         Item savedItem = itemRepository.save(newItem);
-         profile.setFridgeInventory(item.getFridgeInventory());
-         profile.addItemToFridgeInventory(savedItem);
-         return itemRepository.save(savedItem);
+        // Step 1: Create Item
+        Item newItem = new Item();
+        newItem.setName(item.getName());
+        newItem.setCategory(item.getCategory());
+        newItem.setStock(item.getStock());
+        newItem.setCalories(item.getCalories());
+        newItem.setProtein(item.getProtein());
+        newItem.setFat(item.getFat());
+        newItem.setStockStatus(item.getStockStatus());
+        newItem.setPurchaseDate(item.getPurchaseDate());
+        newItem.setExpiryDate(item.getExpiryDate());
+        newItem.setDaysLeft(item.getExpiryDate().toEpochDay() - item.getPurchaseDate().toEpochDay());
+        newItem.setDescription(item.getDescription());
+
+        // Step 2: Save or get the FridgeInventory
+        FridgeInventory fridgeInventory;
+        if (item.getFridgeInventory() != null && item.getFridgeInventory().getId() != null) {
+            fridgeInventory = fridgeInventoryRepository.findById(item.getFridgeInventory().getId())
+                    .orElseThrow(() -> new RuntimeException("FridgeInventory not found"));
+        } else {
+            fridgeInventory = profile.getFridgeInventory();
+            if (fridgeInventory == null) {
+                fridgeInventory = new FridgeInventory();
+                fridgeInventory.setProfile(profile);
+                fridgeInventory = fridgeInventoryRepository.save(fridgeInventory);
+            }
+        }
+
+        // Step 3: Associate the Item with the FridgeInventory
+        newItem.setFridgeInventory(fridgeInventory);
+        // Step 4: Save the Item
+        return itemRepository.save(newItem);
     }
 
 
