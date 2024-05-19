@@ -51,20 +51,21 @@ public class ShoppingListService {
     }
 
     public void AssignShoppingListToUser(Long userId, Long shoppingListId) {
-        ShoppingList shoppingListToBeAssigned = this.shoppingListRepository.findById(shoppingListId)
-                .orElseThrow(() -> new RuntimeException("Shopping List not found!"));
-
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
+        ShoppingList shoppingListToBeAssigned = this.shoppingListRepository.findById(shoppingListId)
+                .orElseThrow(() -> new RuntimeException("Shopping List not found!"));
+
         if (shoppingListToBeAssigned.getUser().contains(user)) {
-                throw new RuntimeException("Shopping List already assigned to the user!");
-            }
+            throw new RuntimeException("Shopping List already assigned to the user!");
+        }
 
         shoppingListToBeAssigned.getUser().add(user);
         this.shoppingListRepository.save(shoppingListToBeAssigned);
     }
 
+    @Transactional
     public List<ShoppingList> getShoppingListByUser(Long userId) {
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
