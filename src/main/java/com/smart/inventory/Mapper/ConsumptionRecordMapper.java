@@ -23,6 +23,7 @@ public class ConsumptionRecordMapper {
         consumptionRecordDTO.setItem(consumptionRecord.getItem() != null
                 ? this.itemMapper.convertToItemDTO(consumptionRecord.getItem())
                 : null);
+        consumptionRecordDTO.setQuantity(consumptionRecord.getQuantity());
         consumptionRecordDTO.setConsumedAt(consumptionRecord.getConsumedAt());
         return consumptionRecordDTO;
     }

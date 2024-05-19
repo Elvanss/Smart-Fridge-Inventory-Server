@@ -15,5 +15,6 @@ public class ConsumptionRecordDTO {
     private Long id;
     private ProfileDTO profile;
     private ItemDTO item;
+    private Integer quantity;
     private LocalDateTime consumedAt;
 }
