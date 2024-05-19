@@ -65,6 +65,8 @@ public class ShoppingListService {
         this.shoppingListRepository.save(shoppingListToBeAssigned);
     }
 
+
+
     @Transactional
     public List<ShoppingList> getShoppingListByUser(Long userId) {
         User user = this.userRepository.findById(userId)
