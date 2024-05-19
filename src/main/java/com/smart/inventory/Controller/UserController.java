@@ -23,7 +23,7 @@ public class UserController {
     private UserMapper userMapper;
 
 
-    // Admin Side: Get all users.
+    // Admin Side: Get all users. (Sequence Diagram)
     @GetMapping
     public Result getUsers() {
         List<User> users = userService.findAll();
@@ -59,6 +59,7 @@ public class UserController {
         return new Result(true, StatusCode.SUCCESS, "User Updated", updatedUserDTO);
     }
 
+    // Sequence Diagram for admin
     @DeleteMapping("/delete/{userId}")
     public Result deleteUser(@PathVariable Long userId) {
         userService.delete(userId);

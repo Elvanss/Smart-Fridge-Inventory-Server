@@ -34,6 +34,10 @@ public class ProfileService {
         this.sharedFridgeRepository = sharedFridgeRepository;
     }
 
+    public List<Profile> getAllProfiles() {
+        return this.profileRepository.findAll();
+    }
+
     public Profile createProfile(Long userId, Profile profile) {
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found with id: ", userId));

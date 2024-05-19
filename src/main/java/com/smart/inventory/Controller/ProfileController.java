@@ -25,6 +25,17 @@ public class ProfileController {
         this.profileMapper = profileMapper;
     }
 
+    @GetMapping
+    public Result findAllProfiles() {
+        List<Profile> foundProfile = this.profileService.getAllProfiles();
+
+        List<ProfileDTO> profileDtos = foundProfile.stream()
+                .map(this.profileMapper::convertToDto)
+                .toList();
+
+        return new Result(true, StatusCode.SUCCESS, "Find All Success", profileDtos);
+    }
+
     // Sequence Diagram 4
     // Requirement 1: Get all profiles for a user.
     @GetMapping("/users/{userId}")
