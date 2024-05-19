@@ -12,6 +12,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findByName(String name);
 
-    @Query("SELECT i FROM Item i WHERE i.name LIKE %?1%") // This is a JPQL query
+    @Query("SELECT i FROM Item i WHERE i.name LIKE %?1%")
     List<Item> findByNameContaining(String name);
 }

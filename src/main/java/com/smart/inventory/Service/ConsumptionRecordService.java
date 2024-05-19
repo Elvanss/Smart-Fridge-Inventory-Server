@@ -4,6 +4,7 @@ import com.smart.inventory.Entity.*;
 import com.smart.inventory.Repository.ConsumptionRecordRepository;
 import com.smart.inventory.Repository.ItemRepository;
 import com.smart.inventory.Repository.ProfileRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -59,32 +60,33 @@ public class ConsumptionRecordService {
 //        this.consumptionRecordRepository.save(consumptionRecord);
 //    }
 
-public void transferItemToComsumptionRecord(Long profileId, Long itemId, Integer quantity) {
-    Profile profile = profileRepository.findById(profileId)
-            .orElseThrow(() -> new RuntimeException("Profile not found"));
+    @Transactional
+    public void transferItemToComsumptionRecord(Long profileId, Long itemId, Integer quantity) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
 
-    Item item = itemRepository.findById(itemId)
-            .orElseThrow(() -> new RuntimeException("Item not found"));
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
 
-    if (item.getStock() < quantity) {
-        throw new RuntimeException("Insufficient stock for the item");
+        // Subtract the quantity from the item's stock
+        item.setStock(item.getStock() - quantity);
+
+        // If the stock is zero, delete the item from the database
+        if (item.getStock() == 0) {
+            itemRepository.delete(item);
+            return;
+        }
+
+        ConsumptionRecord consumptionRecord = new ConsumptionRecord();
+        consumptionRecord.setItem(item);
+        consumptionRecord.setQuantity(quantity);
+        consumptionRecord.setConsumedAt(LocalDateTime.now());
+        consumptionRecord.setProfile(profile);
+
+// Save the updated item and the new consumption record
+        itemRepository.save(item);
+        consumptionRecordRepository.save(consumptionRecord);
     }
-
-    // Subtract the quantity from the item's stock
-    item.setStock(item.getStock() - quantity);
-
-    ConsumptionRecord consumptionRecord = new ConsumptionRecord();
-    consumptionRecord.setItem(item);
-    consumptionRecord.setQuantity(quantity);
-    consumptionRecord.setConsumedAt(LocalDateTime.now());
-    consumptionRecord.setProfile(profile);
-//    profile.transferItemToConsumptionRecord(item, quantity);
-
-
-    // Save the updated item and the new consumption record
-    itemRepository.save(item);
-    consumptionRecordRepository.save(consumptionRecord);
-}
 
     // Requirement 2: Get all consumption records by user
     public List<ConsumptionRecord> getAllConsumptionRecordsByUser(User user) {

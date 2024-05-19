@@ -49,13 +49,14 @@ public class DBInitializer implements CommandLineRunner {
          * */
 
         // Initialize ADMIN (NO TOUCH!)
-//        User admin = new User();
-//        admin.setUsername("admin");
-//        admin.setEmail("admin@admin.com");
-//        admin.setPassword("admin");
-//        admin.setType(RoleList.ADMIN);
-//
-//        // Initialize Profile
+        User admin = new User();
+        admin.setUsername("admin");
+        admin.setEmail("admin@admin.com");
+        admin.setPassword("admin");
+        admin.setType(RoleList.ADMIN);
+        userService.save(admin);
+
+        // Initialize Profile
         Profile profile = new Profile();
         profile.setName("Profile");
         profile.setAge(30);

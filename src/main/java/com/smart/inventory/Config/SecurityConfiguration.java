@@ -42,10 +42,6 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-//    private static final String[] WHITE_LIST = {
-//            "/api/v1/profiles/**",
-//    };
-
     private final RSAPublicKey publicKey;
     private final RSAPrivateKey privateKey;
 
@@ -58,7 +54,8 @@ public class SecurityConfiguration {
 
     public SecurityConfiguration(CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint,
                                  CustomBearerTokenAuthenticationEntryPoint customBearerTokenAuthenticationEntryPoint,
-                                 CustomBearerTokenAccessDeniedHandler customBearerTokenAccessDeniedHandler) throws NoSuchAlgorithmException {
+                                 CustomBearerTokenAccessDeniedHandler customBearerTokenAccessDeniedHandler)
+            throws NoSuchAlgorithmException {
 
         this.customBasicAuthenticationEntryPoint = customBasicAuthenticationEntryPoint;
         this.customBearerTokenAuthenticationEntryPoint = customBearerTokenAuthenticationEntryPoint;
@@ -190,16 +187,8 @@ public class SecurityConfiguration {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        /*
-        Let’s say that that your authorization server communicates authorities in a custom claim called "authorities".
-        In that case, you can configure the claim that JwtAuthenticationConverter should inspect, like so:
-         */
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
 
-        /*
-        You can also configure the authority prefix to be different as well. The default one is "SCOPE_".
-        In this project, you need to change it to empty, that is, no prefix!
-         */
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();

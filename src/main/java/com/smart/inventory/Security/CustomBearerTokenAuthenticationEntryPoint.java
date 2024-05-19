@@ -14,13 +14,7 @@ import java.io.IOException;
 @Component
 public class CustomBearerTokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    /*
-     * Here we've injected the DefaultHandlerExceptionResolver and delegated the handler to this resolver.
-     * This security exception can now be handled with controller advice with an exception handler method.
-     */
-
     private final HandlerExceptionResolver resolver;
-
 
     public CustomBearerTokenAuthenticationEntryPoint(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
         this.resolver = resolver;

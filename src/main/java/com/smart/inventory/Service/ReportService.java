@@ -52,11 +52,11 @@ public class ReportService {
 
         // Calculate total consumed calories, protein, and fat
         reportDTO.setTotalCaloriesConsumed(profile.getConsumptionRecords().stream()
-                .mapToDouble(cr -> cr.getItem().getCalories()).sum());
+                .mapToDouble(cr -> cr.getQuantity() * cr.getItem().getCalories()).sum());
         reportDTO.setTotalProteinConsumed(profile.getConsumptionRecords().stream()
-                .mapToDouble(cr -> cr.getItem().getProtein()).sum());
+                .mapToDouble(cr -> cr.getQuantity() * cr.getItem().getProtein()).sum());
         reportDTO.setTotalFatConsumed(profile.getConsumptionRecords().stream()
-                .mapToDouble(cr -> cr.getItem().getFat()).sum());
+                .mapToDouble(cr -> cr.getQuantity() * cr.getItem().getFat()).sum());
 
 
         return reportDTO;

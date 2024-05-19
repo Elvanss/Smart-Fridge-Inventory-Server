@@ -125,23 +125,19 @@ public class Profile implements Serializable {
             Integer targetProtein = nutritionTarget.getTargetProtein();
 
             // Calculate progress for calories
-            int consumedCalories = consumptionRecords.stream()
-                    .mapToInt(cr -> cr.getItem().getCalories().intValue())
-                    .sum();
-            progress.put("calories", (double) consumedCalories *100 / targetCalories);
+            double consumedCalories = consumptionRecords.stream()
+                    .mapToDouble(cr -> cr.getQuantity() * cr.getItem().getCalories()).sum();
+            progress.put("calories", (double) consumedCalories * 100 / targetCalories);
 
             // Calculate progress for protein
-            int consumedProtein = consumptionRecords.stream()
-                    .mapToInt(cr -> cr.getItem().getProtein().intValue())
-                    .sum();
+            double consumedProtein = consumptionRecords.stream()
+                    .mapToDouble(cr -> cr.getQuantity() * cr.getItem().getProtein()).sum();
             progress.put("protein", (double) consumedProtein * 100 / targetProtein);
 
             // Calculate progress for fat
-            int consumptedFat = consumptionRecords.stream()
-                    .mapToInt(cr -> cr.getItem().getFat().intValue())
-                    .sum();
-            progress.put("fat", (double) consumptedFat *100 / nutritionTarget.getTargetFat());
-
+            double consumedFat = consumptionRecords.stream()
+                    .mapToDouble(cr -> cr.getQuantity() * cr.getItem().getFat()).sum();
+            progress.put("fat", (double) consumedFat * 100 / nutritionTarget.getTargetFat());
         }
         return progress;
     }

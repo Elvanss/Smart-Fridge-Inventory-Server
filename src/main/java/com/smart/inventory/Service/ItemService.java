@@ -117,8 +117,6 @@ public class ItemService {
 //                .toList();
 //    }
 
-
-
     public List<Item> searchItemLeastByCharacter(String name) {
         return this.itemRepository.findByNameContaining(name);
     }
