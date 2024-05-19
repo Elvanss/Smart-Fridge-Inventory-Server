@@ -39,7 +39,7 @@ public class UserService {
                 .orElseThrow(() -> new ObjectNotFoundException("user not found!", userId));
     }
 
-    // Sign UpzZZZZ
+    // Sign Up
     public User save(User user) {
         user = this.userRepository.save(user);
         user.setUsername(user.getUsername());

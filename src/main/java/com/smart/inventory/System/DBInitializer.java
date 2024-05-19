@@ -22,16 +22,18 @@ public class DBInitializer implements CommandLineRunner {
     private final MealRepository mealRepository;
     private final SharedFridgeRepository sharedFridgeInventory;
     private final ShoppingListRepository shoppingListRepository;
+    private final UserRepository userRepository;
 
 
     public DBInitializer(UserService userService,
                          MealRepository mealRepository,
                          SharedFridgeRepository sharedFridgeInventory,
-                         ShoppingListRepository shoppingListRepository) {
+                         ShoppingListRepository shoppingListRepository, UserRepository userRepository) {
         this.userService = userService;
         this.mealRepository = mealRepository;
         this.sharedFridgeInventory = sharedFridgeInventory;
         this.shoppingListRepository = shoppingListRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -54,7 +56,7 @@ public class DBInitializer implements CommandLineRunner {
         admin.setEmail("admin@admin.com");
         admin.setPassword("admin");
         admin.setType(RoleList.ADMIN);
-        userService.save(admin);
+        userService.saveInit(admin);
 
         // Initialize Profile
         Profile profile = new Profile();

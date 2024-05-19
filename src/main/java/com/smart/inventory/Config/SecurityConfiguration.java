@@ -89,6 +89,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/user").permitAll()
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/login").hasAnyRole(RoleList.ADMIN.name(), RoleList.USER.name())
+                                .requestMatchers(HttpMethod.POST, this.baseUrl + "/users/login").hasRole(RoleList.ADMIN.name())
                                 .requestMatchers(HttpMethod.POST, this.baseUrl + "/users").hasRole(RoleList.ADMIN.name())
 
                                 // User Permission
