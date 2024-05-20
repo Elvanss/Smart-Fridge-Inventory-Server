@@ -567,12 +567,12 @@ public class DBInitializer implements CommandLineRunner {
         sharedFridgeInventory.save(sharedFridge);
 
         // Initialize ADMIN (NO TOUCH!)
-        User admin = new User();
-        admin.setUsername("admin");
-        admin.setEmail("admin@admin.com");
-        admin.setPassword("admin");
-        admin.setType(RoleList.ADMIN);
-        userService.saveInit(admin);
+//        User admin = new User();
+//        admin.setUsername("admin");
+//        admin.setEmail("admin@admin.com");
+//        admin.setPassword("admin");
+//        admin.setType(RoleList.ADMIN);
+//        userService.saveInit(admin);
 
 
         Meal meal1 = new Meal();

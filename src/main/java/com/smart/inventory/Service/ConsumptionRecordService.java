@@ -5,6 +5,7 @@ import com.smart.inventory.Repository.ConsumptionRecordRepository;
 import com.smart.inventory.Repository.ItemRepository;
 import com.smart.inventory.Repository.ProfileRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -96,5 +97,15 @@ public class ConsumptionRecordService {
     // Requirement 2: Get all consumption records by profile
     public List<ConsumptionRecord> getAllConsumptionRecordsByProfile(Long userId) {
         return this.consumptionRecordRepository.findAllByProfile(userId);
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void deleteConsumptionItemOver7Days() {
+        List<ConsumptionRecord> consumptionRecords = consumptionRecordRepository.findAll();
+        for (ConsumptionRecord consumptionRecord : consumptionRecords) {
+            if (consumptionRecord.getConsumedAt().isBefore(LocalDateTime.now().minusDays(7))) {
+                consumptionRecordRepository.delete(consumptionRecord);
+            }
+        }
     }
 }

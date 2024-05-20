@@ -1,5 +1,6 @@
 package com.smart.inventory.Service;
 
+import com.smart.inventory.Entity.FridgeInventory;
 import com.smart.inventory.Entity.Profile;
 import com.smart.inventory.Entity.SharedFridge;
 import com.smart.inventory.Entity.User;
@@ -41,12 +42,20 @@ public class UserService {
 
     // Sign Up
     public User save(User user) {
-        user = this.userRepository.save(user);
         user.setUsername(user.getUsername());
         user.setEmail(user.getEmail());
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
         user.setType(user.getType());
-        createSharedFridge(user);
+        this.userRepository.save(user);
+        // Check if the user already has a SharedFridge
+        SharedFridge sharedFridge = user.getSharedFridge();
+        if (sharedFridge == null) {
+            sharedFridge = new SharedFridge();
+            sharedFridge.setUser(user);
+            user.setSharedFridge(sharedFridge);
+        }
+
+        sharedFridgeInventory.save(sharedFridge);
         return user;
     }
 

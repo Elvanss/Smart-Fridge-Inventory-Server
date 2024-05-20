@@ -83,4 +83,6 @@ public class SharedFridgeService {
 
         sharedFridge.addFridgeInventory(fridgeInventoryToBeAssigned);
     }
+
+
 }
