@@ -152,9 +152,26 @@ public class ItemService {
     public void ItemAlertByDayLeft() {
         List<Item> items = this.itemRepository.findAll();
         for (Item item : items) {
-            if (item.getDaysLeft() <= 3) {
+            if (item.getDaysLeft() <= 1) {
                 System.out.println("Item " + item.getName() + " is going to expire in " + item.getDaysLeft() + " days.");
             }
+        }
+    }
+
+    @Transactional
+    public void deleteItemFromFridgeInventory(Long profileId, Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+        FridgeInventory fridgeInventory = profile.getFridgeInventory();
+        if (fridgeInventory != null) {
+            fridgeInventory.removeItem(item);
+            itemRepository.deleteById(itemId);
+        } else {
+            throw new RuntimeException("FridgeInventory not found for the given profile");
         }
     }
 }

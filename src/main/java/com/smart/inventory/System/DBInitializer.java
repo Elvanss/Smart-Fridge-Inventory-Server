@@ -95,7 +95,7 @@ public class DBInitializer implements CommandLineRunner {
         item1.setFat(2.0);
         item1.setStockStatus(StockStatus.IN_STOCK);
         item1.setPurchaseDate(LocalDate.of(2021, 10, 1));
-        item1.setExpiryDate(LocalDate.of(2021, 10, 31));
+        item1.setExpiryDate(LocalDate.of(2023, 10, 31));
         item1.setDaysLeft(item1.getExpiryDate().toEpochDay() - item1.getPurchaseDate().toEpochDay());
         item1.setDescription("Fresh Milk");
 
@@ -108,7 +108,7 @@ public class DBInitializer implements CommandLineRunner {
         item2.setFat(3.0);
         item2.setStockStatus(StockStatus.IN_STOCK);
         item2.setPurchaseDate(LocalDate.of(2021, 10, 2));
-        item2.setExpiryDate(LocalDate.of(2021, 10, 7));
+        item2.setExpiryDate(LocalDate.of(2029, 10, 7));
         item2.setDaysLeft(item2.getExpiryDate().toEpochDay() - item2.getPurchaseDate().toEpochDay());
         item2.setDescription("Whole grain bread");
 
@@ -134,7 +134,7 @@ public class DBInitializer implements CommandLineRunner {
         item4.setFat(4.8);
         item4.setStockStatus(StockStatus.IN_STOCK);
         item4.setPurchaseDate(LocalDate.of(2021, 10, 4));
-        item4.setExpiryDate(LocalDate.of(2021, 10, 18));
+        item4.setExpiryDate(LocalDate.of(2024, 10, 18));
         item4.setDaysLeft(item4.getExpiryDate().toEpochDay() - item4.getPurchaseDate().toEpochDay());
         item4.setDescription("Free-range eggs");
 
@@ -159,8 +159,8 @@ public class DBInitializer implements CommandLineRunner {
         item6.setProtein(31.0);
         item6.setFat(20.0);
         item6.setStockStatus(StockStatus.IN_STOCK);
-        item6.setPurchaseDate(LocalDate.of(2021, 10, 6));
-        item6.setExpiryDate(LocalDate.of(2021, 10, 9));
+        item6.setPurchaseDate(LocalDate.of(2024, 10, 6));
+        item6.setExpiryDate(LocalDate.of(2024, 10, 9));
         item6.setDaysLeft(item6.getExpiryDate().toEpochDay() - item6.getPurchaseDate().toEpochDay());
         item6.setDescription("Chicken breast");
 
@@ -172,8 +172,8 @@ public class DBInitializer implements CommandLineRunner {
         item7.setProtein(26.0);
         item7.setFat(17.0);
         item7.setStockStatus(StockStatus.IN_STOCK);
-        item7.setPurchaseDate(LocalDate.of(2021, 10, 7));
-        item7.setExpiryDate(LocalDate.of(2021, 10, 10));
+        item7.setPurchaseDate(LocalDate.of(2024, 10, 7));
+        item7.setExpiryDate(LocalDate.of(2024, 10, 10));
         item7.setDaysLeft(item7.getExpiryDate().toEpochDay() - item7.getPurchaseDate().toEpochDay());
         item7.setDescription("Beef steak");
 
@@ -211,8 +211,8 @@ public class DBInitializer implements CommandLineRunner {
         item10.setProtein(10.0);
         item10.setFat(0.4);
         item10.setStockStatus(StockStatus.IN_STOCK);
-        item10.setPurchaseDate(LocalDate.of(2021, 10, 2));
-        item10.setExpiryDate(LocalDate.of(2021, 10, 16));
+        item10.setPurchaseDate(LocalDate.of(2024, 10, 2));
+        item10.setExpiryDate(LocalDate.of(2024, 10, 16));
         item10.setDaysLeft(item10.getExpiryDate().toEpochDay() - item10.getPurchaseDate().toEpochDay());
         item10.setDescription("Low-fat yogurt");
 
@@ -224,8 +224,8 @@ public class DBInitializer implements CommandLineRunner {
         item11.setProtein(25.0);
         item11.setFat(50.0);
         item11.setStockStatus(StockStatus.IN_STOCK);
-        item11.setPurchaseDate(LocalDate.of(2021, 10, 5));
-        item11.setExpiryDate(LocalDate.of(2022, 4, 5));
+        item11.setPurchaseDate(LocalDate.of(2024, 10, 5));
+        item11.setExpiryDate(LocalDate.of(2024, 4, 5));
         item11.setDaysLeft(item11.getExpiryDate().toEpochDay() - item11.getPurchaseDate().toEpochDay());
         item11.setDescription("Creamy peanut butter");
 
@@ -496,7 +496,7 @@ public class DBInitializer implements CommandLineRunner {
         item32.setFat(14.0);
         item32.setStockStatus(StockStatus.IN_STOCK);
         item32.setPurchaseDate(LocalDate.of(2023, 5, 13));
-        item32.setExpiryDate(LocalDate.of(2023, 5, 23));
+        item32.setExpiryDate(LocalDate.of(2026, 5, 23));
         item32.setDaysLeft(item32.getExpiryDate().toEpochDay() - item32.getPurchaseDate().toEpochDay());
         item32.setDescription("Pork chops");
 
@@ -509,7 +509,7 @@ public class DBInitializer implements CommandLineRunner {
         item33.setFat(20.0);
         item33.setStockStatus(StockStatus.IN_STOCK);
         item33.setPurchaseDate(LocalDate.of(2023, 5, 14));
-        item33.setExpiryDate(LocalDate.of(2023, 5, 24));
+        item33.setExpiryDate(LocalDate.of(2026, 5, 24));
         item33.setDaysLeft(item33.getExpiryDate().toEpochDay() - item33.getPurchaseDate().toEpochDay());
         item33.setDescription("Lamb leg");
 
@@ -567,12 +567,12 @@ public class DBInitializer implements CommandLineRunner {
         sharedFridgeInventory.save(sharedFridge);
 
         // Initialize ADMIN (NO TOUCH!)
-//        User admin = new User();
-//        admin.setUsername("admin");
-//        admin.setEmail("admin@admin.com");
-//        admin.setPassword("admin");
-//        admin.setType(RoleList.ADMIN);
-//        userService.saveInit(admin);
+        User admin = new User();
+        admin.setUsername("admin");
+        admin.setEmail("admin@admin.com");
+        admin.setPassword("admin");
+        admin.setType(RoleList.ADMIN);
+        userService.saveInit(admin);
 
 
         Meal meal1 = new Meal();
@@ -1694,6 +1694,7 @@ public class DBInitializer implements CommandLineRunner {
         ArrayList<String> items16 = new ArrayList<>();
         items16.add("Chicken Breasts");
         items16.add("Salmon Fillets");
+        items16.add("Banana");
         items16.add("Broccoli");
         items16.add("Sweet Potatoes");
         items16.add("Brown Rice");
@@ -1737,6 +1738,7 @@ public class DBInitializer implements CommandLineRunner {
         items18.add("Canned Food");
         items18.add("Firewood");
         items18.add("Matches");
+        items18.add("Banana");
         items18.add("Flashlights");
         items18.add("Bug Spray");
         items18.add("First Aid Kit");

@@ -39,6 +39,11 @@ public class SharedFridgeService {
         List<Item> allItems = new ArrayList<>();
         for (FridgeInventory fridgeInventory : sharedFridge.getFridgeInventories()) {
             allItems.addAll(fridgeInventory.getItems());
+            for (Item item : fridgeInventory.getItems()) {
+                if (item.getStock() == 0) {
+                    fridgeInventory.removeItem(item);
+                }
+            }
         }
         return allItems;
     }

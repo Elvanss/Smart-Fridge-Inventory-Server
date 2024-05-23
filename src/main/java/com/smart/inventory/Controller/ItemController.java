@@ -88,11 +88,11 @@ public class ItemController {
     }
 
     // Requirement 2: Remove item from fridge
-    @DeleteMapping("/removeFromFridge/{itemId}")
-    public Result removeItemFromFridge(@PathVariable Item itemId) {
-        itemService.removeItemFromFridge(itemId);
-        return new Result(true, StatusCode.SUCCESS, "Item Removed From Fridge");
-    }
+//    @DeleteMapping("/removeFromFridge/{itemId}")
+//    public Result removeItemFromFridge(@PathVariable Item itemId) {
+//        itemService.removeItemFromFridge(itemId);
+//        return new Result(true, StatusCode.SUCCESS, "Item Removed From Fridge");
+//    }
 
     @PostMapping("/updateFridgeInventory/{userId}")
     public Result updateFridgeInventoryFromSmartFridge(@PathVariable Long userId, @RequestBody List<ItemDTO> updatedItemsDTO) {
@@ -112,6 +112,16 @@ public class ItemController {
                 .map(itemMapper::convertToItemDTO)
                 .collect(Collectors.toList());
         return new Result(true, StatusCode.SUCCESS, "Items by Profile", itemDTOS);
+    }
+
+    @DeleteMapping("/removeFromFridge/{profileId}/{itemId}")
+    public Result deleteItemFromFridgeInventory(@PathVariable Long profileId, @PathVariable Long itemId) {
+        Profile profile = profileService.getProfileById(profileId);
+        if (profile == null) {
+            return new Result(false, StatusCode.NOT_FOUND, "Profile not found");
+        }
+        itemService.deleteItemFromFridgeInventory(profileId, itemId);
+        return new Result(true, StatusCode.SUCCESS, "Item Deleted from Fridge");
     }
 
 
